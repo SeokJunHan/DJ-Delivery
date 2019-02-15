@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_call"
+        android:icon="@drawable/call"
+        android:title="전화 걸기"
+        app:showAsAction="always"></item>
+    <item
+        android:id="@+id/action_download"
+        android:icon="@drawable/download"
+        android:title="이미지 저장"
+        app:showAsAction="always"></item>
+
+</menu>
