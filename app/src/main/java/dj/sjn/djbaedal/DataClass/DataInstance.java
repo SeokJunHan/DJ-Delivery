@@ -15,6 +15,8 @@ public class DataInstance {
         }
     };
 
+    private LinkedHashMap<String, list_item> linkedHashMap2 = new LinkedHashMap<>();
+
     private ArrayList<list_item> list1, list2, list3, list4, list5, list6, list7, list8, list9;
 
     private DataInstance() {
@@ -43,6 +45,10 @@ public class DataInstance {
 
     public LinkedHashMap<String, list_item> getLinkedHashMap() {
         return linkedHashMap;
+    }
+
+    public LinkedHashMap<String, list_item> getLinkedHashMap2() {
+        return linkedHashMap2;
     }
 
     public ArrayList<list_item> getList1() {

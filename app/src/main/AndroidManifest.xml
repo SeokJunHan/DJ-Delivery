@@ -5,7 +5,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <meta-data
+        android:name="firebase_messaging_auto_init_enabled"
+        android:value="false" />
+    <meta-data
+        android:name="firebase_analytics_collection_enabled"
+        android:value="false" />
 
     <application
         android:allowBackup="true"
@@ -22,8 +29,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Main2Activity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -35,16 +41,12 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BookmarkActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
-
-    <meta-data
-        android:name="firebase_messaging_auto_init_enabled"
-        android:value="false" />
-    <meta-data
-        android:name="firebase_analytics_collection_enabled"
-        android:value="false" />
 
 </manifest>

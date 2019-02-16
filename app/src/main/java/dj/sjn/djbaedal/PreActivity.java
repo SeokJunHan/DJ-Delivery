@@ -3,10 +3,13 @@ package dj.sjn.djbaedal;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -18,11 +21,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Map;
+
 import dj.sjn.djbaedal.DataClass.CheckNetwork;
 import dj.sjn.djbaedal.DataClass.DataInstance;
 import dj.sjn.djbaedal.DataClass.list_item;
 
 //TODO 2번 불러오는 문제 해결
+//TODO 학식 데이터 파싱
 
 public class PreActivity extends AppCompatActivity {
 
@@ -30,6 +36,7 @@ public class PreActivity extends AppCompatActivity {
     FirebaseFirestore db;
     String[] category;
     boolean check;
+    TextView preCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class PreActivity extends AppCompatActivity {
         db.enableNetwork();
         category = new String[]{"1_chicken", "2_pizza", "3_chinese", "4_schoolfood", "5_jokbo", "6_korean", "7_hamburger", "8_soup", "9_night"};
         check = false;
+        preCount = findViewById(R.id.preCount);
 
         //check network status.
         if (!new CheckNetwork().getNetworkInfo(getApplicationContext())) {
@@ -65,6 +73,7 @@ public class PreActivity extends AppCompatActivity {
 
         preloadGlideImage();
         loadListFromFirebase();
+        loadBookMarkList();
 
         new Thread(new Runnable() {
             @Override
@@ -113,6 +122,31 @@ public class PreActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void loadBookMarkList() {
+        DataInstance.getInstance().getLinkedHashMap2().clear();
+        SharedPreferences pref = getSharedPreferences("bookmark",MODE_PRIVATE);
+        Map<String, ?> prefsMap = pref.getAll();
+        for(Map.Entry<String, ?> entry : prefsMap.entrySet()) {
+            try {
+                String name = entry.getValue().toString().split("~")[0];
+                String tel_no = entry.getValue().toString().split("~")[1];
+                String img_reg = entry.getValue().toString().split("~")[2];
+                if (img_reg.equals("null"))
+                    img_reg = null;
+                String img_reg2 = entry.getValue().toString().split("~")[3];
+                if (img_reg2.equals("null"))
+                    img_reg2 = null;
+                String img_reg3 = entry.getValue().toString().split("~")[4];
+                if (img_reg3.equals("null"))
+                    img_reg3 = null;
+                DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
+                Log.e("꺌룰랭", name + " " + tel_no + " " + img_reg + " " + img_reg2 + " " + img_reg3);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Toast.makeText(getApplicationContext(), "데이터를 불러오는 도중 오류가 발생했습니다. 데이터 삭제가 필요합니다.", Toast.LENGTH_LONG).show();}
+        }
+        Log.e("prefs", prefsMap.toString());
     }
 
     private void loadListFromFirebase() {
@@ -185,6 +219,7 @@ public class PreActivity extends AppCompatActivity {
     private void checkDataAlready() {
         //전설의 9중 if문
         for (int i = 0; i < 500; i++) {
+            preCount.setText(String.valueOf(i));
             if (DataInstance.getInstance().getList1().size() > 0) {
                 if (DataInstance.getInstance().getList2().size() > 0) {
                     if (DataInstance.getInstance().getList3().size() > 0) {

@@ -45,12 +45,11 @@ public class MainActivity extends AppCompatActivity {
     //TODO 스프라이트 이미지
     //TODO DB 이미지 깨끗하게
     //TODO 즐겨찾기 (?)
-    //TODO 학식정보 파싱
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_email : {
+            case android.R.id.home : {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 try {
                     emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"gkstjrwns123@gmail.com"});
@@ -68,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(Intent.createChooser(emailIntent, "이메일 보내기"));
                 }
                 return true;
+            }
+            case R.id.action_bookmark : {
+                Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
             }
         }
 
@@ -107,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar1);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.common_google_signin_btn_icon_light_normal);
         scrollView.smoothScrollBy(0, 0);
 
         if (!new CheckNetwork().getNetworkInfo(getApplicationContext())) {
@@ -176,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 editor2.commit();
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("앱을 설치해주셔서 감사합니다!")
-                        .setMessage("메뉴 추가 및 버그 / 건의사항은 우측상단 Gmail을 이용해주세요!")
+                        .setMessage("메뉴 추가 및 버그 / 건의사항은 좌측상단 Gmail을 이용해주세요!")
                         .setPositiveButton("확인", null)
                         .setCancelable(false);
                 AlertDialog firstExeDialog = alertDialogBuilder.create();
@@ -216,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //TODO 광고 추가
         if (System.currentTimeMillis() - lastTimeBackPressed < 1000) {
             finishAffinity();
             return;

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -12,18 +13,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_orange_light"
-        android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:elevation="4dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <TextView
-            android:id="@+id/toolbar1_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="배불렁"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/toolbar1_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="오늘뭐드실?"
+                android:textColor="@color/black"
+                android:fontFamily="@font/font"
+                android:textSize="24dp" />
+
+        </LinearLayout>
+
+
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
@@ -35,6 +46,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/haksik"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="학식"/>
 
         <TableLayout
             android:layout_width="match_parent"
@@ -133,11 +150,18 @@
 
         </TableLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#CCCCCC"
+                android:layout_marginVertical="5dp"></View>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="최근리스트"
             android:textStyle="bold"
+            android:textColor="#000000"
             android:textSize="20dp"/>
 
         <ListView

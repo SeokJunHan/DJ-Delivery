@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-    android:id="@+id/action_email"
-    android:icon="@drawable/common_google_signin_btn_icon_light_normal"
-    android:title="이메일 보내기"
+    android:id="@+id/action_bookmark"
+    android:icon="@drawable/goldbook"
+    android:title="즐겨찾기"
     app:showAsAction="always"></item>
 
 </menu>
