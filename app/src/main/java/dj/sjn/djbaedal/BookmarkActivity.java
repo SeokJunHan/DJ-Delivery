@@ -1,6 +1,7 @@
 package dj.sjn.djbaedal;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class BookmarkActivity extends AppCompatActivity {
     Toolbar toolbar;
     ArrayList<list_item> arrayList;
     ListAdapter listAdapter;
+    public static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class BookmarkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bookmark);
         toolbar = findViewById(R.id.toolbarb);
         listView = findViewById(R.id.bookmarkList);
+        mContext = this;
 
         if (!new CheckNetwork().getNetworkInfo(getApplicationContext())) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -90,6 +93,21 @@ public class BookmarkActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void deleteList (String name) {
+        for(list_item item : arrayList) {
+            if(item.getName().equals(name)) {
+                arrayList.remove(item);
+                break;
+            }
+        }
+        listAdapter.notifyChanged();
+    }
+
+    public void addList (list_item item) {
+        arrayList.add(0, item);
+        listAdapter.notifyChanged();
     }
 
     @Override

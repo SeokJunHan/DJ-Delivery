@@ -27,8 +27,7 @@ import dj.sjn.djbaedal.DataClass.CheckNetwork;
 import dj.sjn.djbaedal.DataClass.DataInstance;
 import dj.sjn.djbaedal.DataClass.list_item;
 
-//TODO 2번 불러오는 문제 해결
-//TODO 학식 데이터 파싱
+//TODO 학식 데이터 파싱 (밥랩)
 
 public class PreActivity extends AppCompatActivity {
 
@@ -142,9 +141,8 @@ public class PreActivity extends AppCompatActivity {
                 if (img_reg3.equals("null"))
                     img_reg3 = null;
                 DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
-                Log.e("꺌룰랭", name + " " + tel_no + " " + img_reg + " " + img_reg2 + " " + img_reg3);
             } catch (ArrayIndexOutOfBoundsException e) {
-                Toast.makeText(getApplicationContext(), "데이터를 불러오는 도중 오류가 발생했습니다. 데이터 삭제가 필요합니다.", Toast.LENGTH_LONG).show();}
+                Toast.makeText(getApplicationContext(), "데이터를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();}
         }
         Log.e("prefs", prefsMap.toString());
     }
@@ -218,7 +216,7 @@ public class PreActivity extends AppCompatActivity {
 
     private void checkDataAlready() {
         //전설의 9중 if문
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; ; i++) {
             preCount.setText(String.valueOf(i));
             if (DataInstance.getInstance().getList1().size() > 0) {
                 if (DataInstance.getInstance().getList2().size() > 0) {

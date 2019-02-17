@@ -1,6 +1,7 @@
 package dj.sjn.djbaedal;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,8 +55,10 @@ public class Main3Activity extends AppCompatActivity {
     AlertDialog alertDialog;
     Toolbar toolbar;
     ViewPager viewPager;
+    Boolean check = false;
     int currentPage = 0;
     int NUM_PAGES = 0;
+    int count, max;
     String[] urls;
 
     @Override
@@ -80,6 +84,9 @@ public class Main3Activity extends AppCompatActivity {
                 return true;
             }
             case R.id.action_download: {
+                count = 0;
+                max = 0;
+                max++;
                 Glide.with(getApplicationContext()).asBitmap().load(img_reg)
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
@@ -90,15 +97,52 @@ public class Main3Activity extends AppCompatActivity {
                                 }
                                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
                                 Date time = new Date();
-                                String path = saveBitmap(resource, "Download", name + "_" + format.format(time));
+                                String path = saveBitmap(resource, "Download", name + "1_" + format.format(time));
+                                check = true;
                                 if (path != null)
-                                    Toast.makeText(getApplicationContext(), "이미지가 Download 폴더에 저장되었습니다!", Toast.LENGTH_LONG).show();
-                                else {
-                                    Toast.makeText(getApplicationContext(), "이미지를 저장할 수 없습니다.", Toast.LENGTH_LONG).show();
-                                }
+                                    count++;
                             }
                         });
-                return true;
+                if (img_reg2 != null) {
+                    max++;
+                    Glide.with(getApplicationContext()).asBitmap().load(img_reg2)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
+                                    Date time = new Date();
+                                    String path = saveBitmap(resource, "Download", name + "2_" + format.format(time));
+                                    if (path != null)
+                                        count++;
+                                }
+                            });
+                }
+                if (img_reg3 != null) {
+                    max++;
+                    Glide.with(getApplicationContext()).asBitmap().load(img_reg3)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
+                                    Date time = new Date();
+                                    String path = saveBitmap(resource, "Download", name + "3_" + format.format(time));
+                                    if (path != null)
+                                        count++;
+                                }
+                            });
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (count == max)
+                            Toast.makeText(getApplicationContext(), count + "개 이미지가 Download 폴더에 저장되었습니다!", Toast.LENGTH_LONG).show();
+                        else if (count == 0)
+                            Toast.makeText(getApplicationContext(), "이미지를 저장할 수 없습니다.", Toast.LENGTH_LONG).show();
+                        else if (count < max)
+                            Toast.makeText(getApplicationContext(), max - count + "개 이미지 저장에 실패했습니다.", Toast.LENGTH_LONG).show();
+                    }
+                }, 500);
+                    return true;
             }
             case android.R.id.home: {
                 finish();
@@ -164,27 +208,28 @@ public class Main3Activity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             title.setText(name);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if(DataInstance.getInstance().getLinkedHashMap2().get(name) != null)
+            if (DataInstance.getInstance().getLinkedHashMap2().get(name) != null)
                 bookMark.setImageResource(R.drawable.goldbook);
             bookMark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //북마크에 없음
-                    if(DataInstance.getInstance().getLinkedHashMap2().get(name) == null) {
+                    //북마크에 추가
+                    if (DataInstance.getInstance().getLinkedHashMap2().get(name) == null) {
                         editor.putString(name, name + "~" + tel_no + "~" + img_reg + "~" + img_reg2 + "~" + img_reg3);
                         editor.commit();
                         Toast.makeText(getApplicationContext(), "북마크에 추가되었습니다!", Toast.LENGTH_SHORT).show();
                         DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
                         bookMark.setImageResource(R.drawable.goldbook);
+                        ((BookmarkActivity)BookmarkActivity.mContext).addList(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
                     }
-                    //북마크에 있음
+                    //북마크에서 삭제
                     else {
                         editor.remove(name);
                         editor.commit();
                         Toast.makeText(getApplicationContext(), "북마크에서 삭제되었습니다!", Toast.LENGTH_SHORT).show();
                         DataInstance.getInstance().getLinkedHashMap2().remove(name);
                         bookMark.setImageResource(R.drawable.whitebook);
-
+                        ((BookmarkActivity) BookmarkActivity.mContext).deleteList(name);
                     }
                 }
             });
@@ -259,7 +304,7 @@ public class Main3Activity extends AppCompatActivity {
 
         //Set circle indicator radius
         indicator.setRadius(5 * density);
-        NUM_PAGES = urls[1] == null ? 1 : (urls[2] == null ? 2: 3);
+        NUM_PAGES = urls[1] == null ? 1 : (urls[2] == null ? 2 : 3);
 
         new Handler().post(new Runnable() {
             @Override

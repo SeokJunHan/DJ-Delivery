@@ -2,6 +2,7 @@ package dj.sjn.djbaedal;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,14 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -37,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     RecentAdapter recentAdapter;
     ArrayList<list_item> arrayList;
+    AdDialog adDialog;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -44,46 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO 스프라이트 이미지
     //TODO DB 이미지 깨끗하게
-    //TODO 즐겨찾기 (?)
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home : {
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                try {
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"gkstjrwns123@gmail.com"});
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, "문의 내용 : 메뉴 추가 / 버그 / 건의사항\n" +
-                            "상세 내용 : \n\n메뉴 추가 메일에는 전화번호와 메뉴가 잘 보이는 사진을 함께 찍어서 보내주세요.");
-                    emailIntent.setType("text/html");
-                    emailIntent.setPackage("com.google.android.gm");
-
-                    startActivity(emailIntent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    emailIntent.setType("text/html");
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"gkstjrwns123@gmail.com"});
-
-                    startActivity(Intent.createChooser(emailIntent, "이메일 보내기"));
-                }
-                return true;
-            }
-            case R.id.action_bookmark : {
-                Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-        return true;
-    }
+    //TODO 리스트 개선
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
         arrayList = new ArrayList<>();
+
+        MobileAds.initialize(this, getString(R.string.admob_id));
 
         listView = findViewById(R.id.recentList);
         ScrollView scrollView = findViewById(R.id.scrollView);
@@ -112,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationIcon(R.drawable.common_google_signin_btn_icon_light_normal);
+        toolbar.setNavigationIcon(R.drawable.gmail);
         scrollView.smoothScrollBy(0, 0);
 
         if (!new CheckNetwork().getNetworkInfo(getApplicationContext())) {
@@ -136,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         } else {
+            MobileAds.initialize(this, "ca-app-pub-5085487258990676~8014015729");
+            adDialog = new AdDialog(this);
             recentAdapter = new RecentAdapter(this, arrayList);
             listView.setAdapter(recentAdapter);
             getPreference();
@@ -222,14 +197,49 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //TODO 광고 추가
-        if (System.currentTimeMillis() - lastTimeBackPressed < 1000) {
-            finishAffinity();
-            return;
-        }
-        Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
-        lastTimeBackPressed = System.currentTimeMillis();
+        adDialog.show();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home : {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                try {
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"gkstjrwns123@gmail.com"});
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, "문의 내용 :\n" +
+                            "상세 내용 : \n\n전단지 추가를 원할시 전화번호와 메뉴가 잘 보이게 사진을 찍어서 보내주세요.");
+                    emailIntent.setType("text/html");
+                    emailIntent.setPackage("com.google.android.gm");
+
+                    startActivity(emailIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    emailIntent.setType("text/html");
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"gkstjrwns123@gmail.com"});
+
+                    startActivity(Intent.createChooser(emailIntent, "이메일 보내기"));
+                }
+                return true;
+            }
+            case R.id.action_bookmark : {
+                Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
 
     //최초 어플리케이션 실행시 정보 받아옴.
     public void getPreference() {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class list_item {
 
-    private String name, tel_no;
+    private String name, tel_no, subject;
     private String[] image;
 
     public list_item(String[] image, String name, String tel_no) {
@@ -35,5 +35,13 @@ public class list_item {
 
     public void setTel_no(String tel_no) {
         this.tel_no = tel_no;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }

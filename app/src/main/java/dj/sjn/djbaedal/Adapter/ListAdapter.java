@@ -82,4 +82,8 @@ public class ListAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public void notifyChanged() {
+        notifyDataSetChanged();
+    }
 }
