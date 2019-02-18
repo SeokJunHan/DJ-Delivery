@@ -42,7 +42,6 @@ public class PreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre);
         db = FirebaseFirestore.getInstance();
-        db.enableNetwork();
         category = new String[]{"1_chicken", "2_pizza", "3_chinese", "4_schoolfood", "5_jokbo", "6_korean", "7_hamburger", "8_soup", "9_night"};
         check = false;
         preCount = findViewById(R.id.preCount);
@@ -82,13 +81,6 @@ public class PreActivity extends AppCompatActivity {
                     Thread.sleep(1000);
                 } catch (Exception e) {
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        db.disableNetwork();
-                        recreate();
-                    }
-                });
             }
         }).start();
     }
@@ -129,18 +121,21 @@ public class PreActivity extends AppCompatActivity {
         Map<String, ?> prefsMap = pref.getAll();
         for(Map.Entry<String, ?> entry : prefsMap.entrySet()) {
             try {
-                String name = entry.getValue().toString().split("~")[0];
-                String tel_no = entry.getValue().toString().split("~")[1];
-                String img_reg = entry.getValue().toString().split("~")[2];
+                String name = entry.getValue().toString().split("@")[0];
+                String tel_no = entry.getValue().toString().split("@")[1];
+                String type = entry.getValue().toString().split("@")[2];
+                String extra_text = entry.getValue().toString().split("@")[3];
+                String thumbnail = entry.getValue().toString().split("@")[4];
+                String img_reg = entry.getValue().toString().split("@")[5];
                 if (img_reg.equals("null"))
                     img_reg = null;
-                String img_reg2 = entry.getValue().toString().split("~")[3];
+                String img_reg2 = entry.getValue().toString().split("@")[6];
                 if (img_reg2.equals("null"))
                     img_reg2 = null;
-                String img_reg3 = entry.getValue().toString().split("~")[4];
+                String img_reg3 = entry.getValue().toString().split("@")[7];
                 if (img_reg3.equals("null"))
                     img_reg3 = null;
-                DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
+                DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
             } catch (ArrayIndexOutOfBoundsException e) {
                 Toast.makeText(getApplicationContext(), "데이터를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();}
         }
@@ -178,33 +173,63 @@ public class PreActivity extends AppCompatActivity {
                             }
                             String name = document.getData().get("name").toString();
                             String tel_no = document.getData().get("tel_no").toString();
+                            String type = document.getData().get("type").toString();
+                            String extra_text = document.getData().get("extra_text").toString();
+                            String thumbnail;
                             switch (num2) {
                                 case 0:
-                                    DataInstance.getInstance().getList1().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_1);}
+                                    DataInstance.getInstance().getList1().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                                 case 1:
-                                    DataInstance.getInstance().getList2().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_2);}
+                                    DataInstance.getInstance().getList2().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                                 case 2:
-                                    DataInstance.getInstance().getList3().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_3);}
+                                    DataInstance.getInstance().getList3().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                                 case 3:
-                                    DataInstance.getInstance().getList4().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_4);}
+                                    DataInstance.getInstance().getList4().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                                 case 4:
-                                    DataInstance.getInstance().getList5().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_5);}
+                                    DataInstance.getInstance().getList5().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                                 case 5:
-                                    DataInstance.getInstance().getList6().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_6);}
+                                    DataInstance.getInstance().getList6().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                                 case 6:
-                                    DataInstance.getInstance().getList7().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_7);}
+                                    DataInstance.getInstance().getList7().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                                 case 7:
-                                    DataInstance.getInstance().getList8().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_8);}
+                                    DataInstance.getInstance().getList8().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                                 case 8:
-                                    DataInstance.getInstance().getList9().add(new list_item(img_regs, name, tel_no));
+                                    try {
+                                        thumbnail = document.getData().get("thumbnail").toString();
+                                    } catch (NullPointerException e) {thumbnail = getString(R.string.thumbnail_9);}
+                                    DataInstance.getInstance().getList9().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail));
                                     break;
                             }
                         }

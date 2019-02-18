@@ -74,7 +74,7 @@ public class RecentAdapter extends BaseAdapter {
         }
 
         Glide.with(context)
-                .load(list_itemArrayList.get(position).getImage()[0])
+                .load(list_itemArrayList.get(position).getThumbnail())
                 .thumbnail(Glide.with(context)
                         .load("https://t1.daumcdn.net/cfile/tistory/995168475C4DA4702A")
                         .apply(new RequestOptions().override(100, 100).circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH)))

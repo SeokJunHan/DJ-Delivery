@@ -173,11 +173,14 @@ public class Main2Activity extends AppCompatActivity {
                     final String img_reg3 = list_itemArrayList.get(position).getImage()[2];
                     final String name = list_itemArrayList.get(position).getName();
                     final String tel_no = list_itemArrayList.get(position).getTel_no();
+                    final String type = list_itemArrayList.get(position).getType();
+                    final String extra_text = list_itemArrayList.get(position).getExtra_text();
+                    final String thumbnail = list_itemArrayList.get(position).getThumbnail();
 
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            itemClicked(new String[] {img_reg, img_reg2, img_reg3}, name, tel_no);
+                            itemClicked(new String[] {img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail);
                         }
                     });
                     intent.putExtra("img_reg", img_reg);
@@ -185,6 +188,9 @@ public class Main2Activity extends AppCompatActivity {
                     intent.putExtra("img_reg3", img_reg3);
                     intent.putExtra("name", name);
                     intent.putExtra("tel_no", tel_no);
+                    intent.putExtra("type", type);
+                    intent.putExtra("extra_text", extra_text);
+                    intent.putExtra("thumbnail", thumbnail);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
@@ -218,7 +224,7 @@ public class Main2Activity extends AppCompatActivity {
         }, 700);
     }
 
-    private void itemClicked(String[] img_reg, String name, String tel_no) {
+    private void itemClicked(String[] img_reg, String name, String tel_no, String type, String extra_text, String thumbnail) {
         //중복 데이터 존재
         if (DataInstance.getInstance().getLinkedHashMap().get(name) != null) {
             if (DataInstance.getInstance().getLinkedHashMap().get(name).getName().equals(name))
@@ -229,7 +235,7 @@ public class Main2Activity extends AppCompatActivity {
                 break;
             }
         }
-        DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(img_reg, name, tel_no));
+        DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(img_reg, name, tel_no, type, extra_text, thumbnail));
 
         //set pref.
         editor.clear();
@@ -240,6 +246,9 @@ public class Main2Activity extends AppCompatActivity {
             editor.putString("img_reg3" + String.valueOf(i), entry.getValue().getImage()[2]);
             editor.putString("name" + String.valueOf(i), entry.getValue().getName());
             editor.putString("tel_no" + String.valueOf(i), entry.getValue().getTel_no());
+            editor.putString("type" + String.valueOf(i), entry.getValue().getType());
+            editor.putString("extra_text" + String.valueOf(i), entry.getValue().getExtra_text());
+            editor.putString("thumbnail" + String.valueOf(i), entry.getValue().getThumbnail());
             i++;
         }
         editor.commit();

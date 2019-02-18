@@ -49,8 +49,8 @@ public class Main3Activity extends AppCompatActivity {
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    TextView telText, title;
-    String img_reg, img_reg2, img_reg3, name, tel_no;
+    TextView telText, title, extra;
+    String img_reg, img_reg2, img_reg3, name, tel_no, type, extra_text, thumbnail;
     ImageView bookMark;
     AlertDialog alertDialog;
     Toolbar toolbar;
@@ -142,7 +142,7 @@ public class Main3Activity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), max - count + "개 이미지 저장에 실패했습니다.", Toast.LENGTH_LONG).show();
                     }
                 }, 500);
-                    return true;
+                return true;
             }
             case android.R.id.home: {
                 finish();
@@ -169,6 +169,7 @@ public class Main3Activity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar3);
         title = findViewById(R.id.toolbar3_title);
         bookMark = findViewById(R.id.bookmark);
+        extra = findViewById(R.id.extra_text);
         pref = getSharedPreferences("bookmark", MODE_PRIVATE);
         editor = pref.edit();
 
@@ -200,9 +201,13 @@ public class Main3Activity extends AppCompatActivity {
             urls = new String[]{img_reg, img_reg2, img_reg3};
             name = getIntent.getExtras().getString("name");
             tel_no = getIntent.getExtras().getString("tel_no");
+            type = getIntent.getExtras().getString("type");
+            extra_text = getIntent.getExtras().getString("extra_text");
+            thumbnail = getIntent.getExtras().getString("thumbnail");
 
             initViewpager();
             telText.setText("전화번호 : " + tel_no);
+            extra.setText(extra_text.replace("\\n", System.getProperty("line.separator")));
 
             toolbar.setTitle("");
             setSupportActionBar(toolbar);
@@ -215,12 +220,13 @@ public class Main3Activity extends AppCompatActivity {
                 public void onClick(View v) {
                     //북마크에 추가
                     if (DataInstance.getInstance().getLinkedHashMap2().get(name) == null) {
-                        editor.putString(name, name + "~" + tel_no + "~" + img_reg + "~" + img_reg2 + "~" + img_reg3);
+                        editor.putString(name, name + "@" + tel_no + "@" + type + "@" + extra_text + "@" + thumbnail + "@" + img_reg + "@" + img_reg2 + "@" + img_reg3);
                         editor.commit();
                         Toast.makeText(getApplicationContext(), "북마크에 추가되었습니다!", Toast.LENGTH_SHORT).show();
-                        DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
+                        DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
                         bookMark.setImageResource(R.drawable.goldbook);
-                        ((BookmarkActivity)BookmarkActivity.mContext).addList(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
+                        if (((BookmarkActivity) BookmarkActivity.mContext) != null)
+                            ((BookmarkActivity) BookmarkActivity.mContext).addList(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
                     }
                     //북마크에서 삭제
                     else {
@@ -229,7 +235,8 @@ public class Main3Activity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "북마크에서 삭제되었습니다!", Toast.LENGTH_SHORT).show();
                         DataInstance.getInstance().getLinkedHashMap2().remove(name);
                         bookMark.setImageResource(R.drawable.whitebook);
-                        ((BookmarkActivity) BookmarkActivity.mContext).deleteList(name);
+                        if (((BookmarkActivity) BookmarkActivity.mContext) != null)
+                            ((BookmarkActivity) BookmarkActivity.mContext).deleteList(name);
                     }
                 }
             });

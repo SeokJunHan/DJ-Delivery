@@ -34,6 +34,7 @@ public class BookmarkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bookmark);
         toolbar = findViewById(R.id.toolbarb);
         listView = findViewById(R.id.bookmarkList);
+        arrayList = new ArrayList<>();
         mContext = this;
 
         if (!new CheckNetwork().getNetworkInfo(getApplicationContext())) {
@@ -61,14 +62,16 @@ public class BookmarkActivity extends AppCompatActivity {
             toolbar.setTitle("");
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            arrayList = new ArrayList<>();
             for(Map.Entry<String, list_item> entry : DataInstance.getInstance().getLinkedHashMap2().entrySet()) {
                 String img_reg = entry.getValue().getImage()[0];
                 String img_reg2 = entry.getValue().getImage()[1];
                 String img_reg3 = entry.getValue().getImage()[2];
                 String name = entry.getValue().getName();
                 String tel_no = entry.getValue().getTel_no();
-                arrayList.add(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
+                String type = entry.getValue().getType();
+                String extra_text = entry.getValue().getExtra_text();
+                String thumbnail = entry.getValue().getThumbnail();
+                arrayList.add(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
             }
             listAdapter = new ListAdapter(BookmarkActivity.this, arrayList);
             listView.setAdapter(listAdapter);
@@ -81,12 +84,18 @@ public class BookmarkActivity extends AppCompatActivity {
                     final String img_reg3 = arrayList.get(position).getImage()[2];
                     final String name = arrayList.get(position).getName();
                     final String tel_no = arrayList.get(position).getTel_no();
+                    final String type = arrayList.get(position).getType();
+                    final String extra_text = arrayList.get(position).getExtra_text();
+                    final String thumbnail = arrayList.get(position).getThumbnail();
 
                     intent.putExtra("img_reg", img_reg);
                     intent.putExtra("img_reg2", img_reg2);
                     intent.putExtra("img_reg3", img_reg3);
                     intent.putExtra("name", name);
                     intent.putExtra("tel_no", tel_no);
+                    intent.putExtra("type", type);
+                    intent.putExtra("extra_text", extra_text);
+                    intent.putExtra("thumbnail", thumbnail);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);

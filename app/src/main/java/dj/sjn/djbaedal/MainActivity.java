@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView button1, button2, button3, button4, button5, button6, button7, button8, button9;
     ImageView[] buttons;
-    private long lastTimeBackPressed;
     ListView listView;
     RecentAdapter recentAdapter;
     ArrayList<list_item> arrayList;
@@ -123,11 +122,17 @@ public class MainActivity extends AppCompatActivity {
                     final String img_reg3 = arrayList.get(position).getImage()[2];
                     final String name = arrayList.get(position).getName();
                     final String tel_no = arrayList.get(position).getTel_no();
+                    final String type = arrayList.get(position).getType();
+                    final String extra_text = arrayList.get(position).getExtra_text();
+                    final String thumbnail = arrayList.get(position).getThumbnail();
                     intent.putExtra("img_reg", img_reg);
                     intent.putExtra("img_reg2", img_reg2);
                     intent.putExtra("img_reg3", img_reg3);
                     intent.putExtra("name", name);
                     intent.putExtra("tel_no", tel_no);
+                    intent.putExtra("type", type);
+                    intent.putExtra("extra_text", extra_text);
+                    intent.putExtra("thumbnail", thumbnail);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
@@ -250,8 +255,11 @@ public class MainActivity extends AppCompatActivity {
                 String img_reg2 = pref.getString("img_reg2" + String.valueOf(i), null);
                 String img_reg3 = pref.getString("img_reg3" + String.valueOf(i), null);
                 String tel_no = pref.getString("tel_no" + String.valueOf(i), null);
-                arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
-                DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
+                String type = pref.getString("type" + String.valueOf(i), null);
+                String extra_text = pref.getString("extra_text" + String.valueOf(i), null);
+                String thumbnail = pref.getString("thumbnail" + String.valueOf(i), null);
+                arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
+                DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
             }
         }
         recentAdapter.notifyChanged();
@@ -265,7 +273,10 @@ public class MainActivity extends AppCompatActivity {
             String img_reg3 = entry.getValue().getImage()[2];
             String name = entry.getValue().getName();
             String tel_no = entry.getValue().getTel_no();
-            arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
+            String type = entry.getValue().getType();
+            String extra_text = entry.getValue().getExtra_text();
+            String thumbnail = entry.getValue().getThumbnail();
+            arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
         }
         recentAdapter.notifyChanged();
     }
@@ -285,13 +296,19 @@ public class MainActivity extends AppCompatActivity {
                     String img_reg2 = entry.getValue().getImage()[1];
                     String img_reg3 = entry.getValue().getImage()[2];
                     String tel_no = entry.getValue().getTel_no();
+                    String type = entry.getValue().getType();
+                    String extra_text = entry.getValue().getExtra_text();
+                    String thumbnail = entry.getValue().getThumbnail();
                     editor.putString("name" + String.valueOf(i), name);
                     editor.putString("img_reg" + String.valueOf(i), img_reg);
                     editor.putString("img_reg2" + String.valueOf(i), img_reg2);
                     editor.putString("img_reg3" + String.valueOf(i), img_reg3);
                     editor.putString("tel_no" + String.valueOf(i), tel_no);
+                    editor.putString("type" + String.valueOf(i), type);
+                    editor.putString("extra_text" + String.valueOf(i), extra_text);
+                    editor.putString("thumbnail" + String.valueOf(i), thumbnail);
                     i++;
-                    arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no));
+                    arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
                 }
                 editor.commit();
                 recentAdapter.notifyChanged();

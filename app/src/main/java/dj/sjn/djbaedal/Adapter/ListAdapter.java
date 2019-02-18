@@ -29,11 +29,12 @@ public class ListAdapter extends BaseAdapter {
         ImageView imageView;
         TextView name;
         TextView tel_no;
+        TextView type;
     }
 
-    public ListAdapter(Context context, ArrayList<list_item> list_itemARrayList) {
+    public ListAdapter(Context context, ArrayList<list_item> list_itemArrayList) {
         this.context = context;
-        this.list_itemArrayList = list_itemARrayList;
+        this.list_itemArrayList = list_itemArrayList;
     }
 
     @Override
@@ -61,6 +62,7 @@ public class ListAdapter extends BaseAdapter {
             viewholder.imageView = convertView.findViewById(R.id.image);
             viewholder.name = convertView.findViewById(R.id.name);
             viewholder.tel_no = convertView.findViewById(R.id.tel_no);
+            viewholder.type = convertView.findViewById(R.id.type);
 
             //View에 object를 넣고 가져올 수 있게 해줌
             convertView.setTag(viewholder);
@@ -70,8 +72,9 @@ public class ListAdapter extends BaseAdapter {
             viewholder = (ViewHolder) convertView.getTag();
         }
 
+
         Glide.with(context)
-                .load(list_itemArrayList.get(position).getImage()[0])
+                .load(list_itemArrayList.get(position).getThumbnail())
                 .thumbnail(Glide.with(context)
                         .load("https://t1.daumcdn.net/cfile/tistory/995168475C4DA4702A")
                         .apply(new RequestOptions().override(250, 250).circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH)))
@@ -79,6 +82,7 @@ public class ListAdapter extends BaseAdapter {
                 .into(viewholder.imageView);
         viewholder.name.setText(list_itemArrayList.get(position).getName());
         viewholder.tel_no.setText(list_itemArrayList.get(position).getTel_no());
+        viewholder.type.setText(list_itemArrayList.get(position).getType());
 
         return convertView;
     }

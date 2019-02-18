@@ -19,6 +19,8 @@ import dj.sjn.djbaedal.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
+    //TODO 아이콘 변경
+
     static final String TAG = "FCM_Service";
 
     @Override
