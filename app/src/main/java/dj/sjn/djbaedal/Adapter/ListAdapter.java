@@ -76,7 +76,7 @@ public class ListAdapter extends BaseAdapter {
         Glide.with(context)
                 .load(list_itemArrayList.get(position).getThumbnail())
                 .thumbnail(Glide.with(context)
-                        .load("https://t1.daumcdn.net/cfile/tistory/995168475C4DA4702A")
+                        .load("https://t1.daumcdn.net/cfile/tistory/99DCFD345C73F3E111")
                         .apply(new RequestOptions().override(250, 250).circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH)))
                 .apply(new RequestOptions().override(250, 250).circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(viewholder.imageView);

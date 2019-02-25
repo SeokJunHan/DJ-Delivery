@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#FFFFFF"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PreActivity">
 
     <TextView
-        android:id="@+id/preCount"
+        android:id="@+id/preText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="30dp"
-        android:textColor="#000000"
-        android:text="0"
-        />
+        android:text="오늘뭐드실?"
+        android:textColor="@color/black"
+        android:fontFamily="@font/font"
+        android:textSize="36dp" />
 
-</LinearLayout>
+    <ProgressBar
+        android:layout_alignBottom="@id/preText"
+        android:layout_marginBottom="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

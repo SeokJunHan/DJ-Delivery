@@ -4,16 +4,17 @@ import java.util.ArrayList;
 
 public class list_item {
 
-    private String name, tel_no, type, extra_text, thumbnail;
+    private String name, tel_no, type, extra_text, thumbnail, time;
     private String[] image;
 
-    public list_item(String[] image, String name, String tel_no, String type, String extra_text, String thumbnail) {
+    public list_item(String[] image, String name, String tel_no, String type, String extra_text, String thumbnail, String time) {
         this.image = image;
         this.name = name;
         this.tel_no = tel_no;
         this.type = type;
         this.extra_text = extra_text;
         this.thumbnail = thumbnail;
+        this.time = time;
     }
 
     public String[] getImage() {
@@ -62,5 +63,13 @@ public class list_item {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

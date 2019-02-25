@@ -2,7 +2,6 @@ package dj.sjn.djbaedal;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,23 +11,20 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -40,12 +36,13 @@ import dj.sjn.djbaedal.DataClass.list_item;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView button1, button2, button3, button4, button5, button6, button7, button8, button9;
+    ImageView button1, button2, button3, button4, button5, button6, button7, button8, button9, schoolfood;
     ImageView[] buttons;
     ListView listView;
     RecentAdapter recentAdapter;
     ArrayList<list_item> arrayList;
     AdDialog adDialog;
+    AdView adView;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -53,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO 스프라이트 이미지
     //TODO DB 이미지 깨끗하게
-    //TODO 리스트 개선
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         button7 = findViewById(R.id.hamburger);
         button8 = findViewById(R.id.soup);
         button9 = findViewById(R.id.night);
+        schoolfood = findViewById(R.id.haksik);
+        adView = findViewById(R.id.adBanner);
         buttons = new ImageView[]{button1, button2, button3, button4, button5, button6, button7, button8, button9};
 
         Toolbar toolbar = findViewById(R.id.toolbar1);
@@ -108,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         } else {
-            MobileAds.initialize(this, "ca-app-pub-5085487258990676~8014015729");
+            MobileAds.initialize(this, getString(R.string.admob_id));
             adDialog = new AdDialog(this);
             recentAdapter = new RecentAdapter(this, arrayList);
             listView.setAdapter(recentAdapter);
-            getPreference();
+            getPreference(); //Load recent_list.
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -125,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     final String type = arrayList.get(position).getType();
                     final String extra_text = arrayList.get(position).getExtra_text();
                     final String thumbnail = arrayList.get(position).getThumbnail();
+                    final String time = arrayList.get(position).getTime();
                     intent.putExtra("img_reg", img_reg);
                     intent.putExtra("img_reg2", img_reg2);
                     intent.putExtra("img_reg3", img_reg3);
@@ -133,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("type", type);
                     intent.putExtra("extra_text", extra_text);
                     intent.putExtra("thumbnail", thumbnail);
+                    intent.putExtra("time", time);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
@@ -153,6 +153,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+            schoolfood.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), UnivFoodActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+                }
+            });
+
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+            adView.setVisibility(View.GONE); //TODO 렉걸려서 넣은거임 삭제하셈
 
             SharedPreferences settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor2 = settings.edit();
@@ -179,19 +192,19 @@ public class MainActivity extends AppCompatActivity {
             check = true;
         else if (DataInstance.getInstance().getList2().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList3().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList4().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList5().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList6().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList7().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList8().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList9().size() == 0)
             check = true;
         if (check) {
             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left
@@ -245,8 +258,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
-    //최초 어플리케이션 실행시 정보 받아옴.
     public void getPreference() {
         for (int i = 1; i <= 3; i++) {
             String name = pref.getString("name" + String.valueOf(i), null);
@@ -258,8 +269,9 @@ public class MainActivity extends AppCompatActivity {
                 String type = pref.getString("type" + String.valueOf(i), null);
                 String extra_text = pref.getString("extra_text" + String.valueOf(i), null);
                 String thumbnail = pref.getString("thumbnail" + String.valueOf(i), null);
-                arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
-                DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
+                String time = pref.getString("time" + String.valueOf(i), null);
+                arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time));
+                DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time));
             }
         }
         recentAdapter.notifyChanged();
@@ -276,7 +288,8 @@ public class MainActivity extends AppCompatActivity {
             String type = entry.getValue().getType();
             String extra_text = entry.getValue().getExtra_text();
             String thumbnail = entry.getValue().getThumbnail();
-            arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
+            String time = entry.getValue().getTime();
+            arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time));
         }
         recentAdapter.notifyChanged();
     }
@@ -299,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
                     String type = entry.getValue().getType();
                     String extra_text = entry.getValue().getExtra_text();
                     String thumbnail = entry.getValue().getThumbnail();
+                    String time = entry.getValue().getTime();
                     editor.putString("name" + String.valueOf(i), name);
                     editor.putString("img_reg" + String.valueOf(i), img_reg);
                     editor.putString("img_reg2" + String.valueOf(i), img_reg2);
@@ -307,8 +321,9 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("type" + String.valueOf(i), type);
                     editor.putString("extra_text" + String.valueOf(i), extra_text);
                     editor.putString("thumbnail" + String.valueOf(i), thumbnail);
+                    editor.putString("time" + String.valueOf(i), time);
                     i++;
-                    arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
+                    arrayList.add(0, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time));
                 }
                 editor.commit();
                 recentAdapter.notifyChanged();

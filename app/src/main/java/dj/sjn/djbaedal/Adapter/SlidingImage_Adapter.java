@@ -55,7 +55,7 @@ public class SlidingImage_Adapter extends PagerAdapter {
             Glide.with(context)
                     .load(urls[position])
                     .thumbnail(Glide.with(context)
-                            .load("https://t1.daumcdn.net/cfile/tistory/995168475C4DA4702A")
+                            .load("https://t1.daumcdn.net/cfile/tistory/99DCFD345C73F3E111")
                             .apply(new RequestOptions().circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH)))
                     .into(imageView);
 

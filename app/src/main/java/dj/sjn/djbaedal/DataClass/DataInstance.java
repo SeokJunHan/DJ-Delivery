@@ -16,8 +16,11 @@ public class DataInstance {
     };
 
     private LinkedHashMap<String, list_item> linkedHashMap2 = new LinkedHashMap<>();
+    private ArrayList<UnivCaffetteria> Caf1[], Caf2[], Caf3[], Caf4[]; // 학생식당, 남자기숙사, 여자기숙사, 교수회관
 
     private ArrayList<list_item> list1, list2, list3, list4, list5, list6, list7, list8, list9;
+    private String[] days;
+    private int[] week;
 
     private DataInstance() {
         list1 = new ArrayList<>();
@@ -30,6 +33,18 @@ public class DataInstance {
         list7 = new ArrayList<>();
         list8 = new ArrayList<>();
         list9 = new ArrayList<>();
+        Caf1 = new ArrayList[8];
+        Caf2 = new ArrayList[8];
+        Caf3 = new ArrayList[8];
+        Caf4 = new ArrayList[8];
+        days = new String[8];
+        week = new int[8];
+        for(int i=0; i<=7; i++) {
+            Caf1[i] = new ArrayList<>();
+            Caf2[i] = new ArrayList<>();
+            Caf3[i] = new ArrayList<>();
+            Caf4[i] = new ArrayList<>();
+        }
     }
 
     public static DataInstance getInstance() {
@@ -85,5 +100,37 @@ public class DataInstance {
 
     public ArrayList<list_item> getList9() {
         return list9;
+    }
+
+    public ArrayList<UnivCaffetteria>[] getCaf1() {
+        return Caf1;
+    }
+
+    public ArrayList<UnivCaffetteria>[] getCaf2() {
+        return Caf2;
+    }
+
+    public ArrayList<UnivCaffetteria>[] getCaf3() {
+        return Caf3;
+    }
+
+    public ArrayList<UnivCaffetteria>[] getCaf4() {
+        return Caf4;
+    }
+
+    public String[] getDays() {
+        return days;
+    }
+
+    public void setDays(String[] days) {
+        this.days = days;
+    }
+
+    public int[] getWeek() {
+        return week;
+    }
+
+    public void setWeek(int[] week) {
+        this.week = week;
     }
 }

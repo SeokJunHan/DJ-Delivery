@@ -65,10 +65,8 @@ public class RecentAdapter extends BaseAdapter {
             viewholder.name = convertView.findViewById(R.id.recent_name);
             viewholder.deleteButton = convertView.findViewById(R.id.delete_button);
 
-            //View에 object를 넣고 가져올 수 있게 해줌
             convertView.setTag(viewholder);
         }
-        //캐시된 뷰가 있을 경우 저장된 뷰 홀더 사용
         else {
             viewholder = (ViewHolder) convertView.getTag();
         }
@@ -76,7 +74,7 @@ public class RecentAdapter extends BaseAdapter {
         Glide.with(context)
                 .load(list_itemArrayList.get(position).getThumbnail())
                 .thumbnail(Glide.with(context)
-                        .load("https://t1.daumcdn.net/cfile/tistory/995168475C4DA4702A")
+                        .load("https://t1.daumcdn.net/cfile/tistory/99DCFD345C73F3E111")
                         .apply(new RequestOptions().override(100, 100).circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH)))
                 .apply(new RequestOptions().override(100, 100).circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(viewholder.imageView);

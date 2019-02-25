@@ -176,11 +176,12 @@ public class Main2Activity extends AppCompatActivity {
                     final String type = list_itemArrayList.get(position).getType();
                     final String extra_text = list_itemArrayList.get(position).getExtra_text();
                     final String thumbnail = list_itemArrayList.get(position).getThumbnail();
+                    final String time = list_itemArrayList.get(position).getTime();
 
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            itemClicked(new String[] {img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail);
+                            itemClicked(new String[] {img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time);
                         }
                     });
                     intent.putExtra("img_reg", img_reg);
@@ -191,6 +192,7 @@ public class Main2Activity extends AppCompatActivity {
                     intent.putExtra("type", type);
                     intent.putExtra("extra_text", extra_text);
                     intent.putExtra("thumbnail", thumbnail);
+                    intent.putExtra("time", time);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
@@ -224,7 +226,7 @@ public class Main2Activity extends AppCompatActivity {
         }, 700);
     }
 
-    private void itemClicked(String[] img_reg, String name, String tel_no, String type, String extra_text, String thumbnail) {
+    private void itemClicked(String[] img_reg, String name, String tel_no, String type, String extra_text, String thumbnail, String time) {
         //중복 데이터 존재
         if (DataInstance.getInstance().getLinkedHashMap().get(name) != null) {
             if (DataInstance.getInstance().getLinkedHashMap().get(name).getName().equals(name))
@@ -235,7 +237,7 @@ public class Main2Activity extends AppCompatActivity {
                 break;
             }
         }
-        DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(img_reg, name, tel_no, type, extra_text, thumbnail));
+        DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(img_reg, name, tel_no, type, extra_text, thumbnail, time));
 
         //set pref.
         editor.clear();
@@ -249,6 +251,7 @@ public class Main2Activity extends AppCompatActivity {
             editor.putString("type" + String.valueOf(i), entry.getValue().getType());
             editor.putString("extra_text" + String.valueOf(i), entry.getValue().getExtra_text());
             editor.putString("thumbnail" + String.valueOf(i), entry.getValue().getThumbnail());
+            editor.putString("time" + String.valueOf(i), entry.getValue().getTime());
             i++;
         }
         editor.commit();
@@ -269,19 +272,19 @@ public class Main2Activity extends AppCompatActivity {
             check = true;
         else if (DataInstance.getInstance().getList2().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList3().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList4().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList5().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList6().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList7().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList8().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList9().size() == 0)
             check = true;
         if (check) {
             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left

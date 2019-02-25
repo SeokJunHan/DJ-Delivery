@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,8 +50,9 @@ public class Main3Activity extends AppCompatActivity {
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    TextView telText, title, extra;
-    String img_reg, img_reg2, img_reg3, name, tel_no, type, extra_text, thumbnail;
+    TextView telText, title, extra, timeText;
+    LinearLayout time_layout;
+    String img_reg, img_reg2, img_reg3, name, tel_no, type, extra_text, thumbnail, time;
     ImageView bookMark;
     AlertDialog alertDialog;
     Toolbar toolbar;
@@ -170,6 +172,8 @@ public class Main3Activity extends AppCompatActivity {
         title = findViewById(R.id.toolbar3_title);
         bookMark = findViewById(R.id.bookmark);
         extra = findViewById(R.id.extra_text);
+        timeText = findViewById(R.id.time);
+        time_layout = findViewById(R.id.time_layout);
         pref = getSharedPreferences("bookmark", MODE_PRIVATE);
         editor = pref.edit();
 
@@ -204,10 +208,19 @@ public class Main3Activity extends AppCompatActivity {
             type = getIntent.getExtras().getString("type");
             extra_text = getIntent.getExtras().getString("extra_text");
             thumbnail = getIntent.getExtras().getString("thumbnail");
+            time = getIntent.getExtras().getString("time");
 
             initViewpager();
-            telText.setText("전화번호 : " + tel_no);
-            extra.setText(extra_text.replace("\\n", System.getProperty("line.separator")));
+
+            telText.setText(tel_no);
+            if (extra_text != null)
+                extra.setText(extra_text.replace("\\n", System.getProperty("line.separator")));
+            else
+                extra.setVisibility(View.GONE);
+            if (time != null)
+                timeText.setText(time.replace("\\n", System.getProperty("line.separator")));
+            else
+                time_layout.setVisibility(View.GONE);
 
             toolbar.setTitle("");
             setSupportActionBar(toolbar);
@@ -220,13 +233,13 @@ public class Main3Activity extends AppCompatActivity {
                 public void onClick(View v) {
                     //북마크에 추가
                     if (DataInstance.getInstance().getLinkedHashMap2().get(name) == null) {
-                        editor.putString(name, name + "@" + tel_no + "@" + type + "@" + extra_text + "@" + thumbnail + "@" + img_reg + "@" + img_reg2 + "@" + img_reg3);
+                        editor.putString(name, name + "@" + tel_no + "@" + type + "@" + extra_text + "@" + thumbnail + "@" + time + "@" + img_reg + "@" + img_reg2 + "@" + img_reg3);
                         editor.commit();
                         Toast.makeText(getApplicationContext(), "북마크에 추가되었습니다!", Toast.LENGTH_SHORT).show();
-                        DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
+                        DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time));
                         bookMark.setImageResource(R.drawable.goldbook);
                         if (((BookmarkActivity) BookmarkActivity.mContext) != null)
-                            ((BookmarkActivity) BookmarkActivity.mContext).addList(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
+                            ((BookmarkActivity) BookmarkActivity.mContext).addList(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time));
                     }
                     //북마크에서 삭제
                     else {
@@ -251,19 +264,19 @@ public class Main3Activity extends AppCompatActivity {
             check = true;
         else if (DataInstance.getInstance().getList2().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList3().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList4().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList5().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList6().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList7().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList8().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList9().size() == 0)
             check = true;
         if (check) {
             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left

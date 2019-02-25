@@ -71,7 +71,8 @@ public class BookmarkActivity extends AppCompatActivity {
                 String type = entry.getValue().getType();
                 String extra_text = entry.getValue().getExtra_text();
                 String thumbnail = entry.getValue().getThumbnail();
-                arrayList.add(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail));
+                String time = entry.getValue().getTime();
+                arrayList.add(new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time));
             }
             listAdapter = new ListAdapter(BookmarkActivity.this, arrayList);
             listView.setAdapter(listAdapter);
@@ -87,6 +88,7 @@ public class BookmarkActivity extends AppCompatActivity {
                     final String type = arrayList.get(position).getType();
                     final String extra_text = arrayList.get(position).getExtra_text();
                     final String thumbnail = arrayList.get(position).getThumbnail();
+                    final String time = arrayList.get(position).getTime();
 
                     intent.putExtra("img_reg", img_reg);
                     intent.putExtra("img_reg2", img_reg2);
@@ -96,6 +98,7 @@ public class BookmarkActivity extends AppCompatActivity {
                     intent.putExtra("type", type);
                     intent.putExtra("extra_text", extra_text);
                     intent.putExtra("thumbnail", thumbnail);
+                    intent.putExtra("time", time);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
@@ -143,19 +146,19 @@ public class BookmarkActivity extends AppCompatActivity {
             check = true;
         else if (DataInstance.getInstance().getList2().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList3().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList4().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList5().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList6().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList7().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList8().size() == 0)
             check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
+        else if (DataInstance.getInstance().getList9().size() == 0)
             check = true;
         if (check) {
             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left

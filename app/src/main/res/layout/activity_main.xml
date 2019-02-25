@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -12,9 +12,9 @@
         android:id="@+id/toolbar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:elevation="4dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <LinearLayout
@@ -27,148 +27,166 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/font"
                 android:text="오늘뭐드실?"
                 android:textColor="@color/black"
-                android:fontFamily="@font/font"
                 android:textSize="24dp" />
-
         </LinearLayout>
-
 
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Button
+            <ImageView
                 android:id="@+id/haksik"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="학식"/>
+                android:layout_marginVertical="5dp"
+                android:src="@drawable/univfood"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:text="학식" />
+            
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/divider"/>
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:stretchColumns="0,1,2">
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:stretchColumns="0,1,2">
 
-            <TableRow>
+                <TableRow>
 
-                <ImageView
-                    android:id="@+id/chicken"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu1"></ImageView>
+                    <ImageView
+                        android:id="@+id/chicken"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu1"></ImageView>
 
-                <ImageView
-                    android:id="@+id/pizza"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu2"></ImageView>
+                    <ImageView
+                        android:id="@+id/pizza"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu2"></ImageView>
 
-                <ImageView
-                    android:id="@+id/chinese"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu3"></ImageView>
-            </TableRow>
+                    <ImageView
+                        android:id="@+id/chinese"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu3"></ImageView>
+                </TableRow>
 
-            <TableRow>
+                <TableRow>
 
-                <ImageView
-                    android:id="@+id/schoolfood"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu4"></ImageView>
+                    <ImageView
+                        android:id="@+id/schoolfood"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu4"></ImageView>
 
-                <ImageView
-                    android:id="@+id/jokbo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu5"></ImageView>
+                    <ImageView
+                        android:id="@+id/jokbo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu5"></ImageView>
 
-                <ImageView
-                    android:id="@+id/korean"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu6"></ImageView>
-            </TableRow>
+                    <ImageView
+                        android:id="@+id/korean"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu6"></ImageView>
+                </TableRow>
 
-            <TableRow>
+                <TableRow>
 
-                <ImageView
-                    android:id="@+id/hamburger"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu7"></ImageView>
+                    <ImageView
+                        android:id="@+id/hamburger"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu7"></ImageView>
 
-                <ImageView
-                    android:id="@+id/soup"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu8"></ImageView>
+                    <ImageView
+                        android:id="@+id/soup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu8"></ImageView>
 
-                <ImageView
-                    android:id="@+id/night"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/menu9"></ImageView>
-            </TableRow>
+                    <ImageView
+                        android:id="@+id/night"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/menu9"></ImageView>
+                </TableRow>
 
-        </TableLayout>
+            </TableLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="5dp"></View>
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/divider"></View>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="최근리스트"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:textSize="20dp"/>
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="최근리스트"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                android:textStyle="bold" />
 
-        <ListView
-            android:id="@+id/recentList"
-            android:layout_width="match_parent"
-            android:focusable="false"
-            android:layout_height="200dp"></ListView>
+            <ListView
+                android:id="@+id/recentList"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:focusable="false"></ListView>
+
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adBanner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                ads:adSize="BANNER"
+                android:layout_marginTop="10dp"
+                ads:adUnitId="@string/ad_banner"></com.google.android.gms.ads.AdView>
 
         </LinearLayout>
 
