@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 
 import dj.sjn.djbaedal.DataClass.CheckNetwork;
@@ -38,13 +39,32 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-//TODO 학식 데이터 파싱 (밥랩)
-
 public class PreActivity extends AppCompatActivity {
 
-    int num;
+    int num, k;
     FirebaseFirestore db;
     String[] category, days;
+    String[] proverbs = {
+            "[루드비히 포이에르바하]\n먹는 음식이 곧 자신이다.",
+            "[션 스튜어트]\n잘못된 음식이란 것은 없다.",
+            "[조프리 네이어]\n좋은 음식은 좋은 대화로 끝이 난다.",
+            "[캘빈 트릴린]\n건강식품이 나를 아프게 한다.",
+            "[쉴라 그레이엄]\n음식은 가장 원시적인 형태의 위안거리다.",
+            "[제임스 비어드]\n음식은 우리의 공통점이요, 보편적 경험이다.",
+            "[루크레티우스]\n누군가에게는 음식인 것이 다른 이에게는 쓴 독이다.",
+            "[조지 버나드 쇼]\n음식에 대한 사랑보다 더 진실된 사랑은 없다.",
+            "[미스 피기]\n들어 옮길 수 있는 양보다 많이 먹지 말라.",
+            "[마더 테레사]\n백 사람을 먹일 수 없다면 한 사람이라도 먹여라.",
+            "[마크 트웨인]\n인생에서 성공하는 비결 중 하나는 좋아하는\n음식을 먹고 힘내 싸우는 것이다.",
+            "[M.F.K. 피셔]\n다른 인간과 음식을 나눠 먹는 것은 가볍게\n빠져서는 안되는 친밀한 행위이다.",
+            "[줄리아 차일드]\n화려하고 복잡한 걸작을 요리할 필요는 없다.\n다만 신선한 재료로 좋은 음식을 요리하라.",
+            "[소크라테스]\n악인은 먹고 마시기 위해서 살고,\n선인은 살기 위해 먹고 마신다.",
+            "[에픽테토스]\n다른 이에게 무엇을 먹어야한다고 설교하지 말라.\n네게 맞게 먹고 침묵하라.",
+            "[미셸 드 몽테뉴]\n잘 먹는 기술은 결코 하찮은 기술이 아니며,\n그로 인한 기쁨은 작은 기쁨이 아니다.",
+            "[쥘 르나르]\n진정으로 자유로운 사람은 변명하지 않고\n저녁식사 초대를 거절할 수 있는 사람이다.",
+            "[마하트마 간디]\n세상에는 배가 너무 고파 신이 빵의 모습으로만\n나타날 수 있는 사람들이 있다.",
+            "[오슨 웰즈]\n당신이 국가를 위해서 무엇을 할 수 있는지 묻지 말라.\n점심이 무엇인지 물어라."
+    };
     boolean check;
     boolean checkResponse1 = false;
     boolean checkResponse2 = false;
@@ -60,6 +80,8 @@ public class PreActivity extends AppCompatActivity {
         category = new String[]{"1_chicken", "2_pizza", "3_chinese", "4_schoolfood", "5_jokbo", "6_korean", "7_hamburger", "8_soup", "9_night"};
         check = false;
         preText = findViewById(R.id.preText);
+        Random rand = new Random();
+        preText.setText(proverbs[rand.nextInt(proverbs.length)]);
 
         //check network status.
         if (!new CheckNetwork().getNetworkInfo(getApplicationContext())) {
@@ -118,7 +140,7 @@ public class PreActivity extends AppCompatActivity {
                                 Glide.with(getApplicationContext())
                                         .load(img_reg)
                                         .thumbnail(Glide.with(getApplicationContext())
-                                                .load("https://t1.daumcdn.net/cfile/tistory/995168475C4DA4702A")
+                                                .load("https://t1.daumcdn.net/cfile/tistory/99DCFD345C73F3E111")
                                                 .apply(new RequestOptions().override(250, 250).circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH)))
                                         .apply(new RequestOptions().circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL))
                                         .preload(250, 250);
@@ -161,7 +183,6 @@ public class PreActivity extends AppCompatActivity {
     }
 
     private void loadListFromFirebase() {
-        //TODO DataInstance.getInstance().getList1() 등 List 접근시 그 값이 기억됨.
         DataInstance.getInstance().getList1().clear();
         DataInstance.getInstance().getList2().clear();
         DataInstance.getInstance().getList3().clear();
@@ -306,17 +327,14 @@ public class PreActivity extends AppCompatActivity {
             }
             try {
                 Thread.sleep(200);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
     }
 
     private void LoadUnivFoodData() {
-        for (int i = 0; i <= 7; i++) {
-            DataInstance.getInstance().getCaf1()[i].clear();
-            DataInstance.getInstance().getCaf2()[i].clear();
-            DataInstance.getInstance().getCaf3()[i].clear();
-            DataInstance.getInstance().getCaf4()[i].clear();
-        }
+        final SharedPreferences pref = getSharedPreferences("food", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = pref.edit();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://bablabs.com/")
@@ -325,30 +343,86 @@ public class PreActivity extends AppCompatActivity {
         UnivFoodInterface foodInterface = retrofit.create(UnivFoodInterface.class);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        days = new String[5];
+        days = new String[7];
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         days[0] = simpleDateFormat.format(cal.getTime());
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 7; i++) {
             cal.add(Calendar.DATE, 1);
             days[i] = simpleDateFormat.format(cal.getTime());
         }
         DataInstance.getInstance().setDays(days);
 
-            for (int i = 0; i < 5; i++) {
+        if (pref.getString("key", "").equals(days[0])) {
+            Log.e("데이터 있음", days[0] + " " + DataInstance.getInstance().getCaf2().length);
+            for (int i = 0; i < 7; i++) {
+                for (int j = 0; ; j++) {
+                    String string = pref.getString("Caf1" + i + "" + j, " ");
+                    if (!string.equals(" ")) {
+                        int time = Integer.parseInt(string.split("@")[0]);
+                        String menu = string.split("@")[1];
+                        DataInstance.getInstance().getCaf1()[i].add(new UnivCaffetteria(time, menu));
+                    } else break;
+                }
+                for (int j = 0; ; j++) {
+                    String string = pref.getString("Caf2" + i + "" + j, " ");
+                    if (!string.equals(" ")) {
+                        int time = Integer.parseInt(string.split("@")[0]);
+                        String menu = string.split("@")[1];
+                        DataInstance.getInstance().getCaf2()[i].add(new UnivCaffetteria(time, menu));
+                    } else break;
+                }
+                for (int j = 0; ; j++) {
+                    String string = pref.getString("Caf3" + i + "" + j, " ");
+                    if (!string.equals(" ")) {
+                        int time = Integer.parseInt(string.split("@")[0]);
+                        String menu = string.split("@")[1];
+                        DataInstance.getInstance().getCaf3()[i].add(new UnivCaffetteria(time, menu));
+                    } else break;
+                }
+                for (int j = 0; ; j++) {
+                    String string = pref.getString("Caf4" + i + "" + j, " ");
+                    if (!string.equals(" ")) {
+                        int time = Integer.parseInt(string.split("@")[0]);
+                        String menu = string.split("@")[1];
+                        DataInstance.getInstance().getCaf4()[i].add(new UnivCaffetteria(time, menu));
+                    } else break;
+                }
+            }
+            checkResponse1 = true;
+            checkResponse2 = true;
+            checkResponse3 = true;
+            checkResponse4 = true;
+            return;
+        } else {
+            editor.clear();
+            editor.putString("key", days[0]);
+            for (int i = 0; i < 7; i++) {
+                DataInstance.getInstance().getCaf1()[i].clear();
+                DataInstance.getInstance().getCaf2()[i].clear();
+                DataInstance.getInstance().getCaf3()[i].clear();
+                DataInstance.getInstance().getCaf4()[i].clear();
+            }
+        }
+
+        Log.e("데이터가 존재하지 않음.", "API를 호출하여 메뉴를 추가합니다.");
+        for (int i = 0; i < 7; i++) {
             final int j = i;
             Call<UnivFoodList> info1 = foodInterface.getFoodList1(days[i]); // 학생회관
             info1.enqueue(new Callback<UnivFoodList>() {
                 @Override
                 public void onResponse(Call<UnivFoodList> call, Response<UnivFoodList> response) {
                     checkResponse1 = true;
+                    k = 0;
                     UnivFoodList body = response.body();
                     if (body.getStore().getMenus().size() != 0) {
                         for (UnivFoodList.Store.Menu menu : body.getStore().getMenus()) {
                             int time = menu.getTime();
                             String menuObject = menu.getDescription();
                             DataInstance.getInstance().getCaf1()[j].add(new UnivCaffetteria(time, menuObject));
+                            editor.putString("Caf1" + j + "" + (k++), time + "@" + menuObject);
                         }
+                        editor.commit();
                     } else
                         DataInstance.getInstance().getCaf1()[j].add(new UnivCaffetteria(-1, null));
                 }
@@ -364,13 +438,16 @@ public class PreActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<UnivFoodList> call, Response<UnivFoodList> response) {
                     checkResponse2 = true;
+                    k = 0;
                     UnivFoodList body = response.body();
                     if (body.getStore().getMenus().size() != 0) {
                         for (UnivFoodList.Store.Menu menu : body.getStore().getMenus()) {
                             int time = menu.getTime();
                             String menuObject = menu.getDescription();
                             DataInstance.getInstance().getCaf2()[j].add(new UnivCaffetteria(time, menuObject));
+                            editor.putString("Caf2" + j + "" + (k++), time + "@" + menuObject);
                         }
+                        editor.commit();
                     } else
                         DataInstance.getInstance().getCaf2()[j].add(new UnivCaffetteria(-1, null));
                 }
@@ -386,13 +463,16 @@ public class PreActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<UnivFoodList> call, Response<UnivFoodList> response) {
                     checkResponse3 = true;
+                    k = 0;
                     UnivFoodList body = response.body();
                     if (body.getStore().getMenus().size() != 0) {
                         for (UnivFoodList.Store.Menu menu : body.getStore().getMenus()) {
                             int time = menu.getTime();
                             String menuObject = menu.getDescription();
                             DataInstance.getInstance().getCaf3()[j].add(new UnivCaffetteria(time, menuObject));
+                            editor.putString("Caf3" + j + "" + (k++), time + "@" + menuObject);
                         }
+                        editor.commit();
                     } else
                         DataInstance.getInstance().getCaf3()[j].add(new UnivCaffetteria(-1, null));
                 }
@@ -408,13 +488,16 @@ public class PreActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<UnivFoodList> call, Response<UnivFoodList> response) {
                     checkResponse4 = true;
+                    k = 0;
                     UnivFoodList body = response.body();
                     if (body.getStore().getMenus().size() != 0) {
                         for (UnivFoodList.Store.Menu menu : body.getStore().getMenus()) {
                             int time = menu.getTime();
                             String menuObject = menu.getDescription();
                             DataInstance.getInstance().getCaf4()[j].add(new UnivCaffetteria(time, menuObject));
+                            editor.putString("Caf4" + j + "" + (k++), time + "@" + menuObject);
                         }
+                        editor.commit();
                     } else
                         DataInstance.getInstance().getCaf4()[j].add(new UnivCaffetteria(-1, null));
                 }

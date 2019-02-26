@@ -7,7 +7,6 @@
     tools:context=".PreActivity">
 
     <TextView
-        android:id="@+id/preText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -16,10 +15,15 @@
         android:fontFamily="@font/font"
         android:textSize="36dp" />
 
-    <ProgressBar
-        android:layout_alignBottom="@id/preText"
-        android:layout_marginBottom="30dp"
+    <TextView
+        android:id="@+id/preText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:text="proverbs"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"/>
 
 </RelativeLayout>

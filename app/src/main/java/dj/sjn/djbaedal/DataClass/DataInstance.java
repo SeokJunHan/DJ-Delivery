@@ -33,13 +33,13 @@ public class DataInstance {
         list7 = new ArrayList<>();
         list8 = new ArrayList<>();
         list9 = new ArrayList<>();
-        Caf1 = new ArrayList[8];
-        Caf2 = new ArrayList[8];
-        Caf3 = new ArrayList[8];
-        Caf4 = new ArrayList[8];
-        days = new String[8];
-        week = new int[8];
-        for(int i=0; i<=7; i++) {
+        Caf1 = new ArrayList[7];
+        Caf2 = new ArrayList[7];
+        Caf3 = new ArrayList[7];
+        Caf4 = new ArrayList[7];
+        days = new String[7];
+        week = new int[7];
+        for(int i=0; i<7; i++) {
             Caf1[i] = new ArrayList<>();
             Caf2[i] = new ArrayList<>();
             Caf3[i] = new ArrayList<>();
