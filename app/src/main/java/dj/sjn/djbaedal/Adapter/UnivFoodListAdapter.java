@@ -87,7 +87,7 @@ public class UnivFoodListAdapter extends BaseAdapter {
                     break;
                 case 2:
                     time_text = "저녁";
-                    viewholder.time.setBackgroundColor(Color.parseColor("#ff9e80"));
+                    viewholder.time.setBackgroundColor(Color.parseColor("#ff5050"));
                     viewholder.time.setTextColor(Color.parseColor("#FFFFFF"));
                     break;
                 case 3:

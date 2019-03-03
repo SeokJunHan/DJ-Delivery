@@ -34,9 +34,9 @@ public class RecentAdapter extends BaseAdapter {
         TextView name;
     }
 
-    public RecentAdapter(Context context, ArrayList<list_item> list_itemARrayList) {
+    public RecentAdapter(Context context, ArrayList<list_item> list_itemArrayList) {
         this.context = context;
-        this.list_itemArrayList = list_itemARrayList;
+        this.list_itemArrayList = list_itemArrayList;
     }
 
     @Override

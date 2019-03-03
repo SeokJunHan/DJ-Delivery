@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     dj.sjn.djbaedal.DataClass.MyListView listView;
     RecentAdapter recentAdapter;
     ArrayList<list_item> arrayList;
-    AdDialog adDialog;
     AdView adView;
     private long lastTimeBackPressed;
 
@@ -245,6 +244,13 @@ public class MainActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+                return true;
+            }
+            case R.id.action_search : {
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                return true;
             }
         }
 

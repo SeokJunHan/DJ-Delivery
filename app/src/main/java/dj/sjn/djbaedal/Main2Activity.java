@@ -38,7 +38,7 @@ public class Main2Activity extends AppCompatActivity {
     Toolbar toolbar;
 
     int page = 0;
-    final int OFFSET = 6;
+    final int OFFSET = 10;
     final int MAX_IMAGES = 3; // Main3's images limit.
     boolean mLockListView = false; // 데이터 불러올때 중복 안되게 하는 변수.
     boolean check = false;

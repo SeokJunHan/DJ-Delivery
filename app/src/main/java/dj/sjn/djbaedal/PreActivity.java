@@ -43,6 +43,7 @@ public class PreActivity extends AppCompatActivity {
 
     int num, k;
     FirebaseFirestore db;
+    boolean loadFail = false;
     String[] category, days;
     String[] proverbs = {
             "[루드비히 포이에르바하]\n먹는 음식이 곧 자신이다.",
@@ -192,6 +193,7 @@ public class PreActivity extends AppCompatActivity {
         DataInstance.getInstance().getList7().clear();
         DataInstance.getInstance().getList8().clear();
         DataInstance.getInstance().getList9().clear();
+        DataInstance.getInstance().getSearch_list().clear();
 
         for (int i = 0; i < category.length; i++) {
             final int num2 = i;
@@ -249,6 +251,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_1);
                                     }
                                     DataInstance.getInstance().getList1().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                                 case 1:
                                     try {
@@ -257,6 +260,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_2);
                                     }
                                     DataInstance.getInstance().getList2().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                                 case 2:
                                     try {
@@ -265,6 +269,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_3);
                                     }
                                     DataInstance.getInstance().getList3().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                                 case 3:
                                     try {
@@ -273,6 +278,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_4);
                                     }
                                     DataInstance.getInstance().getList4().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                                 case 4:
                                     try {
@@ -281,6 +287,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_5);
                                     }
                                     DataInstance.getInstance().getList5().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                                 case 5:
                                     try {
@@ -289,6 +296,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_6);
                                     }
                                     DataInstance.getInstance().getList6().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                                 case 6:
                                     try {
@@ -297,6 +305,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_7);
                                     }
                                     DataInstance.getInstance().getList7().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                                 case 7:
                                     try {
@@ -305,6 +314,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_8);
                                     }
                                     DataInstance.getInstance().getList8().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                                 case 8:
                                     try {
@@ -313,6 +323,7 @@ public class PreActivity extends AppCompatActivity {
                                         thumbnail = getString(R.string.thumbnail_9);
                                     }
                                     DataInstance.getInstance().getList9().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
+                                    DataInstance.getInstance().getSearch_list().add(new list_item(img_regs, name, tel_no, type, extra_text, thumbnail, time));
                                     break;
                             }
                         }
@@ -442,7 +453,16 @@ public class PreActivity extends AppCompatActivity {
                     if (body.getStore().getMenus().size() != 0) {
                         for (UnivFoodList.Store.Menu menu : body.getStore().getMenus()) {
                             int time = menu.getTime();
-                            String menuObject = menu.getDescription();
+                            String menuObject = "";
+                            if(menu.getName().equals("")) {
+                                menuObject = menu.getDescription();
+                            }
+                            else if(menu.getDescription().equals("")) {
+                                menuObject = menu.getName().trim();
+                            }
+                            else {
+                                menuObject = menu.getName().trim() + " " + menu.getDescription();
+                            }
                             DataInstance.getInstance().getCaf1()[j].add(new UnivCaffetteria(time, menuObject));
                             editor.putString("Caf1" + j + "" + (k++), time + "@" + menuObject);
                         }
@@ -454,6 +474,7 @@ public class PreActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
+                    loadFail = true;
                 }
             });
 
@@ -467,7 +488,16 @@ public class PreActivity extends AppCompatActivity {
                     if (body.getStore().getMenus().size() != 0) {
                         for (UnivFoodList.Store.Menu menu : body.getStore().getMenus()) {
                             int time = menu.getTime();
-                            String menuObject = menu.getDescription();
+                            String menuObject = "";
+                            if(menu.getName().equals(" ")) {
+                                menuObject = menu.getDescription();
+                            }
+                            else if(menu.getDescription().equals(" ")) {
+                                menuObject = menu.getName();
+                            }
+                            else {
+                                menuObject = menu.getName() + " " + menu.getDescription();
+                            }
                             DataInstance.getInstance().getCaf2()[j].add(new UnivCaffetteria(time, menuObject));
                             editor.putString("Caf2" + j + "" + (k++), time + "@" + menuObject);
                         }
@@ -479,6 +509,7 @@ public class PreActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
+                    loadFail = true;
                 }
             });
 
@@ -492,7 +523,16 @@ public class PreActivity extends AppCompatActivity {
                     if (body.getStore().getMenus().size() != 0) {
                         for (UnivFoodList.Store.Menu menu : body.getStore().getMenus()) {
                             int time = menu.getTime();
-                            String menuObject = menu.getDescription();
+                            String menuObject = "";
+                            if(menu.getName().equals(" ")) {
+                                menuObject = menu.getDescription();
+                            }
+                            else if(menu.getDescription().equals(" ")) {
+                                menuObject = menu.getName();
+                            }
+                            else {
+                                menuObject = menu.getName() + " " + menu.getDescription();
+                            }
                             DataInstance.getInstance().getCaf3()[j].add(new UnivCaffetteria(time, menuObject));
                             editor.putString("Caf3" + j + "" + (k++), time + "@" + menuObject);
                         }
@@ -504,6 +544,7 @@ public class PreActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
+                    loadFail = true;
                 }
             });
 
@@ -517,7 +558,16 @@ public class PreActivity extends AppCompatActivity {
                     if (body.getStore().getMenus().size() != 0) {
                         for (UnivFoodList.Store.Menu menu : body.getStore().getMenus()) {
                             int time = menu.getTime();
-                            String menuObject = menu.getDescription();
+                            String menuObject = "";
+                            if(menu.getName().equals(" ")) {
+                                menuObject = menu.getDescription();
+                            }
+                            else if(menu.getDescription().equals(" ")) {
+                                menuObject = menu.getName();
+                            }
+                            else {
+                                menuObject = menu.getName() + " " + menu.getDescription();
+                            }
                             DataInstance.getInstance().getCaf4()[j].add(new UnivCaffetteria(time, menuObject));
                             editor.putString("Caf4" + j + "" + (k++), time + "@" + menuObject);
                         }
@@ -529,6 +579,11 @@ public class PreActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
+                    loadFail = true;
+                    if(loadFail) {
+                        editor.clear();
+                        editor.commit();
+                    }
                 }
             });
             editor.putString("key", days[0]);

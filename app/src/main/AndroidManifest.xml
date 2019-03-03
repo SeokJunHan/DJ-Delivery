@@ -9,18 +9,16 @@
 
     <meta-data
         android:name="firebase_messaging_auto_init_enabled"
-        android:value="false"/>
+        android:value="false" />
     <meta-data
         android:name="firebase_analytics_collection_enabled"
-        android:value="false"/>
-
+        android:value="false" />
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/push_small_icon"/>
-
+        android:resource="@drawable/push_small_icon" />
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_color"
-        android:resource="@color/icon_color"/>
+        android:resource="@color/icon_color" />
 
     <application
         android:allowBackup="true"
@@ -29,6 +27,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
 
         <service android:name=".DataClass.MyFirebaseMessagingService">
             <intent-filter>
@@ -57,20 +59,21 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".BookmarkActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".UnivFoodActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 

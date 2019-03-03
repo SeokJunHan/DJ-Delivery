@@ -19,6 +19,7 @@ public class DataInstance {
     private ArrayList<UnivCaffetteria> Caf1[], Caf2[], Caf3[], Caf4[]; // 학생식당, 남자기숙사, 여자기숙사, 교수회관
 
     private ArrayList<list_item> list1, list2, list3, list4, list5, list6, list7, list8, list9;
+    private ArrayList<list_item> search_list;
     private String[] days;
     private int[] week;
 
@@ -33,6 +34,7 @@ public class DataInstance {
         list7 = new ArrayList<>();
         list8 = new ArrayList<>();
         list9 = new ArrayList<>();
+        search_list = new ArrayList<>();
         Caf1 = new ArrayList[7];
         Caf2 = new ArrayList[7];
         Caf3 = new ArrayList[7];
@@ -132,5 +134,13 @@ public class DataInstance {
 
     public void setWeek(int[] week) {
         this.week = week;
+    }
+
+    public ArrayList<list_item> getSearch_list() {
+        return search_list;
+    }
+
+    public void setSearch_list(ArrayList<list_item> search_list) {
+        this.search_list = search_list;
     }
 }
