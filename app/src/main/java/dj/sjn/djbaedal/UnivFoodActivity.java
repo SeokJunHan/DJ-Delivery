@@ -6,17 +6,15 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import dj.sjn.djbaedal.Adapter.UnivFoodListAdapter;
 import dj.sjn.djbaedal.DataClass.CheckNetwork;
@@ -28,7 +26,7 @@ public class UnivFoodActivity extends AppCompatActivity {
     Toolbar toolbar;
     Spinner spinner;
     UnivFoodListAdapter adapter1, adapter2, adapter3, adapter4;
-    ListView listView1, listView2, listView3, listView4;
+    dj.sjn.djbaedal.DataClass.MyListView listView1, listView2, listView3, listView4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +62,7 @@ public class UnivFoodActivity extends AppCompatActivity {
             alertDialog.show();
         }
 
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
+        Calendar cal = Calendar.getInstance();
         int today_week = cal.get(Calendar.DAY_OF_WEEK);
 
         final ArrayList<String> list = new ArrayList<>();
@@ -122,29 +120,49 @@ public class UnivFoodActivity extends AppCompatActivity {
     private void SpinnerSelected(int position) {
         ArrayList<UnivCaffetteria> arrayList1 = new ArrayList<>();
         adapter1 = new UnivFoodListAdapter(UnivFoodActivity.this, arrayList1);
-        for(UnivCaffetteria menu : DataInstance.getInstance().getCaf1()[position]) {
-            arrayList1.add(new UnivCaffetteria(menu.getTime(), menu.getMenu()));
+        if(DataInstance.getInstance().getCaf1()[position].size() == 0)  {
+            arrayList1.add(null);
+        }
+        else {
+            for (UnivCaffetteria menu : DataInstance.getInstance().getCaf1()[position]) {
+                arrayList1.add(new UnivCaffetteria(menu.getTime(), menu.getMenu()));
+            }
         }
         listView1.setAdapter(adapter1);
 
         ArrayList<UnivCaffetteria> arrayList2 = new ArrayList<>();
         adapter2 = new UnivFoodListAdapter(UnivFoodActivity.this, arrayList2);
-        for(UnivCaffetteria menu : DataInstance.getInstance().getCaf2()[position]) {
-            arrayList2.add(new UnivCaffetteria(menu.getTime(), menu.getMenu()));
+        if(DataInstance.getInstance().getCaf2()[position].size() == 0)  {
+            arrayList2.add(null);
+        }
+        else {
+            for (UnivCaffetteria menu : DataInstance.getInstance().getCaf2()[position]) {
+                arrayList2.add(new UnivCaffetteria(menu.getTime(), menu.getMenu()));
+            }
         }
         listView2.setAdapter(adapter2);
 
         ArrayList<UnivCaffetteria> arrayList3 = new ArrayList<>();
         adapter3 = new UnivFoodListAdapter(UnivFoodActivity.this, arrayList3);
-        for(UnivCaffetteria menu : DataInstance.getInstance().getCaf3()[position]) {
-            arrayList3.add(new UnivCaffetteria(menu.getTime(), menu.getMenu()));
+        if(DataInstance.getInstance().getCaf3()[position].size() == 0)  {
+            arrayList3.add(null);
+        }
+        else {
+            for (UnivCaffetteria menu : DataInstance.getInstance().getCaf3()[position]) {
+                arrayList3.add(new UnivCaffetteria(menu.getTime(), menu.getMenu()));
+            }
         }
         listView3.setAdapter(adapter3);
 
         ArrayList<UnivCaffetteria> arrayList4 = new ArrayList<>();
         adapter4 = new UnivFoodListAdapter(UnivFoodActivity.this, arrayList4);
-        for(UnivCaffetteria menu : DataInstance.getInstance().getCaf4()[position]) {
-            arrayList4.add(new UnivCaffetteria(menu.getTime(), menu.getMenu()));
+        if(DataInstance.getInstance().getCaf4()[position].size() == 0)  {
+            arrayList4.add(null);
+        }
+        else {
+            for (UnivCaffetteria menu : DataInstance.getInstance().getCaf4()[position]) {
+                arrayList4.add(new UnivCaffetteria(menu.getTime(), menu.getMenu()));
+            }
         }
         listView4.setAdapter(adapter4);
     }
@@ -157,6 +175,12 @@ public class UnivFoodActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left
     }
 
     @Override

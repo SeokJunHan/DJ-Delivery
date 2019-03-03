@@ -11,9 +11,9 @@
         android:id="@+id/toolbarb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/toolbar_color"
         android:text=""
-        android:elevation="4dp"
+        android:elevation="6dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -21,9 +21,10 @@
             android:id="@+id/toolbar2_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="24dp"
             android:text="북마크"
+            android:textStyle="bold"
             android:layout_gravity="center"/>
 
     </android.support.v7.widget.Toolbar>

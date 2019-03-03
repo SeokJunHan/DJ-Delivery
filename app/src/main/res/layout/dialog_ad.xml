@@ -10,8 +10,7 @@
         android:text="앱을 종료하시겠습니까?"
         android:textSize="20dp"
         android:paddingVertical="10dp"
-        android:background="@color/colorPrimaryDark"
-        android:textStyle="bold"
+        android:background="@color/colorPrimary"
         android:textColor="@color/black"
         android:gravity="center"/>
 
@@ -26,7 +25,7 @@
         android:layout_height="wrap_content"
         ads:adSize="300x250"
         android:layout_marginVertical="15dp"
-        ads:adUnitId="@string/ad_banner"></com.google.android.gms.ads.AdView>
+        ads:adUnitId="@string/ad_dialog"></com.google.android.gms.ads.AdView>
 
         <ProgressBar
             android:id="@+id/adProgress"

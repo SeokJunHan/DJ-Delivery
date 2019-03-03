@@ -1,8 +1,11 @@
 package dj.sjn.djbaedal.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 
 import dj.sjn.djbaedal.R;
 
@@ -20,6 +26,7 @@ public class SlidingImage_Adapter extends PagerAdapter {
     private String[] urls;
     private LayoutInflater inflater;
     private Context context;
+    ImageView imageView;
 
     public SlidingImage_Adapter(Context context, String[] urls) {
         this.context = context;
@@ -49,13 +56,19 @@ public class SlidingImage_Adapter extends PagerAdapter {
         View imageLayout = inflater.inflate(R.layout.slidingimages_layout, container, false);
 
         assert imageLayout != null;
-        ImageView imageView = imageLayout.findViewById(R.id.sliding_image);
+        imageView = imageLayout.findViewById(R.id.sliding_image);
 
         if(urls[position] != null) {
+
+            for(String text : urls) {
+                if(text != null)
+                    Log.e("text", text);
+            }
+
             Glide.with(context)
                     .load(urls[position])
                     .thumbnail(Glide.with(context)
-                            .load("https://t1.daumcdn.net/cfile/tistory/99DCFD345C73F3E111")
+                            .load("https://t1.daumcdn.net/cfile/tistory/99B6454D5C79316A25")
                             .apply(new RequestOptions().circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH)))
                     .into(imageView);
 
@@ -64,6 +77,8 @@ public class SlidingImage_Adapter extends PagerAdapter {
 
         return imageLayout;
     }
+
+
 
 
 }

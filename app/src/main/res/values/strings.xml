@@ -1,15 +1,16 @@
 <resources>
-    <string name="app_name">오늘뭐드실?</string>
+    <string name="app_name">오늘뭐드실</string>
     <string name="admob_id">ca-app-pub-5085487258990676~8014015729</string>
     <string name="ad_banner">ca-app-pub-5085487258990676/6870300925</string>
+    <string name="ad_dialog">ca-app-pub-5085487258990676/9782396539</string>
     <string name="ad_test">ca-app-pub-3940256099942544/6300978111</string> <!-- test_banner -->
     <string name="thumbnail_1">https://t1.daumcdn.net/cfile/tistory/99EBF7375C6AC36A2D</string>
     <string name="thumbnail_2">https://t1.daumcdn.net/cfile/tistory/994037375C6AC36A1E</string>
     <string name="thumbnail_3">https://t1.daumcdn.net/cfile/tistory/997EE2375C6AC36B26</string>
-    <string name="thumbnail_4">https://t1.daumcdn.net/cfile/tistory/9969A7375C6AC36C1C</string>
+    <string name="thumbnail_4">https://t1.daumcdn.net/cfile/tistory/99A98F365C7A7D0135</string>
     <string name="thumbnail_5">https://t1.daumcdn.net/cfile/tistory/9914BD375C6AC36C2B</string>
     <string name="thumbnail_6">https://t1.daumcdn.net/cfile/tistory/995CA6375C6AC36C1D</string>
     <string name="thumbnail_7">https://t1.daumcdn.net/cfile/tistory/997CC0375C6AC36D1B</string>
-    <string name="thumbnail_8">https://t1.daumcdn.net/cfile/tistory/99C5B1375C6AC36D2F</string>
+    <string name="thumbnail_8">https://t1.daumcdn.net/cfile/tistory/99647E3E5C7A7B5608</string>
     <string name="thumbnail_9">https://t1.daumcdn.net/cfile/tistory/9911B0355C6AC36D36</string>
 </resources>

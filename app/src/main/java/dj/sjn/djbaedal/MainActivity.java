@@ -11,16 +11,14 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -38,18 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView button1, button2, button3, button4, button5, button6, button7, button8, button9, schoolfood;
     ImageView[] buttons;
-    ListView listView;
+    dj.sjn.djbaedal.DataClass.MyListView listView;
     RecentAdapter recentAdapter;
     ArrayList<list_item> arrayList;
     AdDialog adDialog;
     AdView adView;
+    private long lastTimeBackPressed;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     public static Context mContext;
-
-    //TODO 스프라이트 이미지
-    //TODO DB 이미지 깨끗하게
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         button8 = findViewById(R.id.soup);
         button9 = findViewById(R.id.night);
         schoolfood = findViewById(R.id.haksik);
-        adView = findViewById(R.id.adBanner);
         buttons = new ImageView[]{button1, button2, button3, button4, button5, button6, button7, button8, button9};
+        adView = findViewById(R.id.adBanner);
 
         Toolbar toolbar = findViewById(R.id.toolbar1);
         toolbar.setTitle("");
@@ -107,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.show();
         } else {
             MobileAds.initialize(this, getString(R.string.admob_id));
-            adDialog = new AdDialog(this);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
             recentAdapter = new RecentAdapter(this, arrayList);
             listView.setAdapter(recentAdapter);
             getPreference(); //Load recent_list.
@@ -163,10 +160,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
-            adView.setVisibility(View.GONE); //TODO 렉걸려서 넣은거임 삭제하셈
-
             SharedPreferences settings = getSharedPreferences("Settings", Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor2 = settings.edit();
             String checkFirst = settings.getString("first", null);
@@ -215,7 +208,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        adDialog.show();
+        if(System.currentTimeMillis() - lastTimeBackPressed < 750) {
+            finishAffinity();
+            return;
+        }
+        Toast.makeText(this, "종료하시려면 '뒤로' 버튼을 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
+        lastTimeBackPressed = System.currentTimeMillis();
     }
 
     @Override
@@ -224,9 +222,11 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home : {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 try {
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"gkstjrwns123@gmail.com"});
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, "문의 내용 :\n" +
-                            "상세 내용 : \n\n전단지 추가를 원할시 전화번호와 메뉴가 잘 보이게 사진을 찍어서 보내주세요.");
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"byeolsoft@gmail.com"});
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, "" +
+                            "\n\n\n==============================\n오늘뭐드실? 앱을 이용해주셔서 감사합니다!\n" +
+                            "전단지 추가를 원하신다면 전화번호와 메뉴가 잘 보이게 사진을 찍어서 보내주세요.\n" +
+                            "오류 발생시에는 해결을 위해 오류 발생 상황에 대한 자세한 설명을 부탁드립니다.");
                     emailIntent.setType("text/html");
                     emailIntent.setPackage("com.google.android.gm");
 
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                     emailIntent.setType("text/html");
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"gkstjrwns123@gmail.com"});
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"byeolsoft@gmail.com"});
 
                     startActivity(Intent.createChooser(emailIntent, "이메일 보내기"));
                 }

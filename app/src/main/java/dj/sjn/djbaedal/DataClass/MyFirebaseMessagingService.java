@@ -19,8 +19,6 @@ import dj.sjn.djbaedal.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    //TODO 아이콘 변경
-
     static final String TAG = "FCM_Service";
 
     @Override
@@ -40,7 +38,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String channelId = "djbaedal_channel";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.push_small_icon)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(messageBody)
                 .setAutoCancel(true)

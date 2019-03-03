@@ -11,8 +11,8 @@
         android:id="@+id/toolbarUnivFood"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light"
-        android:elevation="4dp"
+        android:background="@color/toolbar_color"
+        android:elevation="6dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -20,9 +20,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="4dp"
-            android:text="오늘의 학식"
+            android:text="이번주 학식"
             android:textColor="@color/black"
-            android:textSize="24dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:layout_gravity="center"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
@@ -55,12 +55,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"/>
 
-            <ListView
+            <dj.sjn.djbaedal.DataClass.MyListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:divider="#ffffff"
+                android:dividerHeight="0dp"
                 android:id="@+id/food_list1">
-            </ListView>
+            </dj.sjn.djbaedal.DataClass.MyListView>
 
             <View
                 android:layout_width="match_parent"
@@ -76,12 +78,14 @@
                 android:text="남자 기숙사"
                 android:layout_marginLeft="10dp"/>
 
-            <ListView
+            <dj.sjn.djbaedal.DataClass.MyListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:divider="#ffffff"
+                android:dividerHeight="0dp"
                 android:id="@+id/food_list2">
-            </ListView>
+            </dj.sjn.djbaedal.DataClass.MyListView>
 
             <View
                 android:layout_width="match_parent"
@@ -97,12 +101,14 @@
                 android:text="여자 기숙사"
                 android:layout_marginLeft="10dp"/>
 
-            <ListView
+            <dj.sjn.djbaedal.DataClass.MyListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:divider="#ffffff"
+                android:dividerHeight="0dp"
                 android:id="@+id/food_list3">
-            </ListView>
+            </dj.sjn.djbaedal.DataClass.MyListView>
 
             <View
                 android:layout_width="match_parent"
@@ -118,12 +124,14 @@
                 android:text="교수회관"
                 android:layout_marginLeft="10dp"/>
 
-            <ListView
+            <dj.sjn.djbaedal.DataClass.MyListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
+                android:divider="#ffffff"
+                android:dividerHeight="0dp"
                 android:id="@+id/food_list4">
-            </ListView>
+            </dj.sjn.djbaedal.DataClass.MyListView>
 
         </LinearLayout>
 

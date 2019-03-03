@@ -140,7 +140,7 @@ public class PreActivity extends AppCompatActivity {
                                 Glide.with(getApplicationContext())
                                         .load(img_reg)
                                         .thumbnail(Glide.with(getApplicationContext())
-                                                .load("https://t1.daumcdn.net/cfile/tistory/99DCFD345C73F3E111")
+                                                .load("https://t1.daumcdn.net/cfile/tistory/99B6454D5C79316A25")
                                                 .apply(new RequestOptions().override(250, 250).circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH)))
                                         .apply(new RequestOptions().circleCrop().diskCacheStrategy(DiskCacheStrategy.ALL))
                                         .preload(250, 250);
@@ -210,9 +210,24 @@ public class PreActivity extends AppCompatActivity {
                                 }
                             } catch (NullPointerException e) {
                             }
-                            String name = document.getData().get("name").toString();
-                            String tel_no = document.getData().get("tel_no").toString();
-                            String type = document.getData().get("type").toString();
+                            String name;
+                            try {
+                                name = document.getData().get("name").toString();
+                            } catch (NullPointerException e_name) {
+                                name = "";
+                            }
+                            String tel_no;
+                            try {
+                                tel_no = document.getData().get("tel_no").toString();
+                            } catch (NullPointerException e_tel_no) {
+                                tel_no = "";
+                            }
+                            String type;
+                            try {
+                                type = document.getData().get("type").toString();
+                            } catch (NullPointerException e_type) {
+                                type = "";
+                            }
                             String extra_text;
                             try {
                                 extra_text = document.getData().get("extra_text").toString();
@@ -344,7 +359,7 @@ public class PreActivity extends AppCompatActivity {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         days = new String[7];
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
+        Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         days[0] = simpleDateFormat.format(cal.getTime());
         for (int i = 1; i < 7; i++) {
@@ -353,38 +368,56 @@ public class PreActivity extends AppCompatActivity {
         }
         DataInstance.getInstance().setDays(days);
 
+        for (int i = 0; i < 7; i++) {
+            DataInstance.getInstance().getCaf1()[i].clear();
+            DataInstance.getInstance().getCaf2()[i].clear();
+            DataInstance.getInstance().getCaf3()[i].clear();
+            DataInstance.getInstance().getCaf4()[i].clear();
+        }
+
         if (pref.getString("key", "").equals(days[0])) {
-            Log.e("데이터 있음", days[0] + " " + DataInstance.getInstance().getCaf2().length);
             for (int i = 0; i < 7; i++) {
                 for (int j = 0; ; j++) {
-                    String string = pref.getString("Caf1" + i + "" + j, " ");
-                    if (!string.equals(" ")) {
+                    String string = pref.getString("Caf1" + String.valueOf(i) + String.valueOf(j), null);
+                    if ((string != null)) {
                         int time = Integer.parseInt(string.split("@")[0]);
-                        String menu = string.split("@")[1];
+                        String menu = "";
+                        try {
+                            menu = string.split("@")[1];
+                        } catch (ArrayIndexOutOfBoundsException array_e) {}
                         DataInstance.getInstance().getCaf1()[i].add(new UnivCaffetteria(time, menu));
                     } else break;
                 }
                 for (int j = 0; ; j++) {
-                    String string = pref.getString("Caf2" + i + "" + j, " ");
-                    if (!string.equals(" ")) {
+                    String string = pref.getString("Caf2" + String.valueOf(i) + String.valueOf(j), null);
+                    if ((string != null)) {
                         int time = Integer.parseInt(string.split("@")[0]);
-                        String menu = string.split("@")[1];
+                        String menu = "";
+                        try {
+                            menu = string.split("@")[1];
+                        } catch (ArrayIndexOutOfBoundsException array_e) {}
                         DataInstance.getInstance().getCaf2()[i].add(new UnivCaffetteria(time, menu));
                     } else break;
                 }
                 for (int j = 0; ; j++) {
-                    String string = pref.getString("Caf3" + i + "" + j, " ");
-                    if (!string.equals(" ")) {
+                    String string = pref.getString("Caf3" + String.valueOf(i) + String.valueOf(j), null);
+                    if ((string != null)) {
                         int time = Integer.parseInt(string.split("@")[0]);
-                        String menu = string.split("@")[1];
+                        String menu = "";
+                        try {
+                            menu = string.split("@")[1];
+                        } catch (ArrayIndexOutOfBoundsException array_e) {}
                         DataInstance.getInstance().getCaf3()[i].add(new UnivCaffetteria(time, menu));
                     } else break;
                 }
                 for (int j = 0; ; j++) {
-                    String string = pref.getString("Caf4" + i + "" + j, " ");
-                    if (!string.equals(" ")) {
+                    String string = pref.getString("Caf4" + String.valueOf(i) + String.valueOf(j), null);
+                    if ((string != null)) {
                         int time = Integer.parseInt(string.split("@")[0]);
-                        String menu = string.split("@")[1];
+                        String menu = "";
+                        try {
+                            menu = string.split("@")[1];
+                        } catch (ArrayIndexOutOfBoundsException array_e) {}
                         DataInstance.getInstance().getCaf4()[i].add(new UnivCaffetteria(time, menu));
                     } else break;
                 }
@@ -394,18 +427,9 @@ public class PreActivity extends AppCompatActivity {
             checkResponse3 = true;
             checkResponse4 = true;
             return;
-        } else {
-            editor.clear();
-            editor.putString("key", days[0]);
-            for (int i = 0; i < 7; i++) {
-                DataInstance.getInstance().getCaf1()[i].clear();
-                DataInstance.getInstance().getCaf2()[i].clear();
-                DataInstance.getInstance().getCaf3()[i].clear();
-                DataInstance.getInstance().getCaf4()[i].clear();
-            }
         }
 
-        Log.e("데이터가 존재하지 않음.", "API를 호출하여 메뉴를 추가합니다.");
+        Log.e("데이터가 존재하지 않음", "API를 호출하여 메뉴를 추가합니다.");
         for (int i = 0; i < 7; i++) {
             final int j = i;
             Call<UnivFoodList> info1 = foodInterface.getFoodList1(days[i]); // 학생회관
@@ -429,7 +453,7 @@ public class PreActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "학식 데이터를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -454,7 +478,7 @@ public class PreActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "학식 데이터를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -479,7 +503,7 @@ public class PreActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "학식 데이터를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -504,9 +528,11 @@ public class PreActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "학식 데이터를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
                 }
             });
+            editor.putString("key", days[0]);
+            editor.commit();
         }
     }
 }

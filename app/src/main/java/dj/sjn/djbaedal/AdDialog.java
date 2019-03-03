@@ -34,7 +34,7 @@ public class AdDialog extends Dialog {
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
                 super.onAdLoaded();
             }
         });

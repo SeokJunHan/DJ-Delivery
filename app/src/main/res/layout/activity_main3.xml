@@ -13,8 +13,8 @@
         android:id="@+id/toolbar3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
+        android:background="@color/toolbar_color"
+        android:elevation="6dp"
         android:text=""
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
@@ -26,8 +26,10 @@
             android:layout_gravity="center"
             android:text="세부정보"
             android:textColor="@color/black"
-            android:textSize="24dp"
-            android:textStyle="bold" />
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            />
 
     </android.support.v7.widget.Toolbar>
 
@@ -101,7 +103,8 @@
                     android:layout_marginTop="10dp"
                     android:gravity="right"
                     android:textColor="@color/gray"
-                    android:text="extra_text"
+                    android:text="extra_text\nextra_text"
+                    android:lineSpacingMultiplier="1.5"
                     android:textSize="18dp" />
 
             </LinearLayout>
@@ -114,7 +117,7 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/pager"
                     android:layout_width="match_parent"
-                    android:layout_height="650dp"
+                    android:layout_height="600dp"
                     android:layout_alignParentTop="true" />
 
                 <ImageView
@@ -136,7 +139,7 @@
                     android:gravity="bottom"
                     android:padding="10dp"
                     app:centered="true"
-                    app:fillColor="@color/colorPrimaryDark"
+                    app:fillColor="@color/colorPrimary"
                     app:pageColor="#fff"
                     app:snap="false" />
             </RelativeLayout>

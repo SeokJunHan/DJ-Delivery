@@ -2,6 +2,7 @@ package dj.sjn.djbaedal.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,43 +68,48 @@ public class UnivFoodListAdapter extends BaseAdapter {
             viewholder.food_null = convertView.findViewById(R.id.food_null);
 
             convertView.setTag(viewholder);
-        }
-        else {
+        } else {
             viewholder = (ViewHolder) convertView.getTag();
         }
 
         String time_text = "";
-        switch(univFoodArrayList.get(position).getTime()) {
-            case 0:
-                time_text = "아침";
-                break;
-            case 1:
-                time_text = "점심";
-                viewholder.time.setBackgroundColor(Color.parseColor("#ffa726"));
-                viewholder.time.setTextColor(Color.parseColor("#FFFFFF"));
-                break;
-            case 2:
-                time_text = "저녁";
-                viewholder.time.setBackgroundColor(Color.parseColor("#ff9e80"));
-                viewholder.time.setTextColor(Color.parseColor("#FFFFFF"));
-                break;
-            case 3:
-                time_text = "종일";
-                viewholder.time.setBackgroundColor(Color.parseColor("#c6ff00"));
-                break;
-            case 4:
-                time_text = "기타";
-                viewholder.time.setBackgroundColor(Color.parseColor("#82b1ff"));
-                break;
+        if(univFoodArrayList.get(0) != null) {
+            switch (univFoodArrayList.get(position).getTime()) {
+                case 0:
+                    time_text = "아침";
+                    viewholder.time.setBackgroundColor(Color.parseColor("#ffff00"));
+                    viewholder.time.setTextColor(Color.parseColor("#757575"));
+                    break;
+                case 1:
+                    time_text = "점심";
+                    viewholder.time.setBackgroundColor(Color.parseColor("#ffa726"));
+                    viewholder.time.setTextColor(Color.parseColor("#FFFFFF"));
+                    break;
+                case 2:
+                    time_text = "저녁";
+                    viewholder.time.setBackgroundColor(Color.parseColor("#ff9e80"));
+                    viewholder.time.setTextColor(Color.parseColor("#FFFFFF"));
+                    break;
+                case 3:
+                    time_text = "종일";
+                    viewholder.time.setBackgroundColor(Color.parseColor("#c6ff00"));
+                    viewholder.time.setTextColor(Color.parseColor("#FFFFFF"));
+                    break;
+                case 4:
+                    time_text = "기타";
+                    viewholder.time.setBackgroundColor(Color.parseColor("#82b1ff"));
+                    viewholder.time.setTextColor(Color.parseColor("#FFFFFF"));
+                    break;
+            }
+
+            if (univFoodArrayList.get(position).getMenu() != null) {
+                viewholder.menu.setText(univFoodArrayList.get(position).getMenu().replace(" ", " | "));
+                viewholder.time.setText(time_text);
+                viewholder.food_null.setVisibility(View.GONE);
+            }
         }
 
-        if(univFoodArrayList.get(position).getMenu() != null) {
-            viewholder.menu.setText(univFoodArrayList.get(position).getMenu().replace(" ", " | "));
-            viewholder.time.setText(time_text);
-            viewholder.food_null.setVisibility(View.GONE);
-        }
-
-        else {
+        else if (univFoodArrayList.get(0) == null) {
             viewholder.food_exist.setVisibility(View.GONE);
         }
 

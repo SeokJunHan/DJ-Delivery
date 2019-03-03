@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="15dp"
     android:orientation="vertical">
 
@@ -9,6 +9,7 @@
         android:id="@+id/foodExist_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="15dp"
         android:orientation="horizontal">
 
     <TextView
@@ -46,6 +47,7 @@
             android:gravity="center"
             android:textColor="@color/gray"
             android:text="오늘은 학식이 없어요 !"
+            android:layout_marginVertical="5dp"
             android:textSize="20dp" />
 
 </LinearLayout>
