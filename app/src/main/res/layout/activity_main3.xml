@@ -122,12 +122,13 @@
 
                 <ImageView
                     android:id="@+id/bookmark"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="15dp"
                     android:layout_marginRight="15dp"
+                    android:alpha="0.75"
                     android:src="@drawable/whitebook" />
 
                 <com.viewpagerindicator.CirclePageIndicator
@@ -139,7 +140,7 @@
                     android:gravity="bottom"
                     android:padding="10dp"
                     app:centered="true"
-                    app:fillColor="@color/colorPrimary"
+                    app:fillColor="#ffa726"
                     app:pageColor="#fff"
                     app:snap="false" />
             </RelativeLayout>

@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +26,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 import dj.sjn.djbaedal.Adapter.RecentAdapter;
@@ -173,6 +177,44 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog firstExeDialog = alertDialogBuilder.create();
                 firstExeDialog.show();
             }
+
+            Calendar cal = Calendar.getInstance(); // today
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String today = simpleDateFormat.format(cal.getTime());
+            cal.add(Calendar.DATE, 1);
+            String d2 = "";
+            d2 = simpleDateFormat.format(cal.getTime());
+            String checkReview = settings.getString("review", "null");
+            Log.e(today, d2);
+            Log.e("checkReview", checkReview);
+            if (checkReview.equals(today)) {
+                Log.e("생성", "아무튼 생성됨");
+                editor2.putString("review", "done");
+                editor2.commit();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("앱의 사용 후기를 말씀해주세요")
+                        .setMessage("좋은 리뷰가 더 좋은 앱을 만듭니다.\n리뷰를 남겨주세요!")
+                        .setCancelable(false)
+                        .setPositiveButton("좋아요", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                final String appPackageName = getPackageName();
+                                try {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                } catch (android.content.ActivityNotFoundException anf_e) {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                                }
+                            }
+                        })
+                        .setNegativeButton("싫어요", null);
+                AlertDialog reviewDialog = alertDialogBuilder.create();
+                reviewDialog.show();
+            }
+            else if(checkReview.equals("null")) {
+                Log.e("없어서 만듬", "암튼 만듬");
+                editor2.putString("review", d2);
+                editor2.commit();
+            }
         }
     }
 
@@ -207,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(System.currentTimeMillis() - lastTimeBackPressed < 750) {
+        if (System.currentTimeMillis() - lastTimeBackPressed < 750) {
             finishAffinity();
             return;
         }
@@ -218,10 +260,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home : {
+            case android.R.id.home: {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 try {
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"byeolsoft@gmail.com"});
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"byeolsoft@gmail.com"});
                     emailIntent.putExtra(Intent.EXTRA_TEXT, "" +
                             "\n\n\n==============================\n오늘뭐드실? 앱을 이용해주셔서 감사합니다!\n" +
                             "전단지 추가를 원하신다면 전화번호와 메뉴가 잘 보이게 사진을 찍어서 보내주세요.\n" +
@@ -233,20 +275,20 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                     emailIntent.setType("text/html");
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"byeolsoft@gmail.com"});
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"byeolsoft@gmail.com"});
 
                     startActivity(Intent.createChooser(emailIntent, "이메일 보내기"));
                 }
                 return true;
             }
-            case R.id.action_bookmark : {
+            case R.id.action_bookmark: {
                 Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
                 return true;
             }
-            case R.id.action_search : {
+            case R.id.action_search: {
                 Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);

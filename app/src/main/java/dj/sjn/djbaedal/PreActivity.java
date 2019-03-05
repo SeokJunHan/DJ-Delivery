@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,7 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
-import java.util.TimeZone;
 
 import dj.sjn.djbaedal.DataClass.CheckNetwork;
 import dj.sjn.djbaedal.DataClass.DataInstance;
@@ -81,6 +82,12 @@ public class PreActivity extends AppCompatActivity {
         category = new String[]{"1_chicken", "2_pizza", "3_chinese", "4_schoolfood", "5_jokbo", "6_korean", "7_hamburger", "8_soup", "9_night"};
         check = false;
         preText = findViewById(R.id.preText);
+        TextView copyText = findViewById(R.id.copyright_text);
+        try {
+            String version = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            copyText.setText(copyText.getText().toString().concat(" " + version));
+        } catch (PackageManager.NameNotFoundException name_e) {
+            name_e.printStackTrace();}
         Random rand = new Random();
         preText.setText(proverbs[rand.nextInt(proverbs.length)]);
 
