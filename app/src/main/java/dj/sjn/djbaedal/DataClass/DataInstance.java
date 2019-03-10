@@ -21,7 +21,8 @@ public class DataInstance {
     private ArrayList<list_item> list1, list2, list3, list4, list5, list6, list7, list8, list9;
     private ArrayList<list_item> search_list;
     private String[] days;
-    private int[] week;
+    private String serial;
+    boolean banned = false;
 
     private DataInstance() {
         list1 = new ArrayList<>();
@@ -40,13 +41,13 @@ public class DataInstance {
         Caf3 = new ArrayList[7];
         Caf4 = new ArrayList[7];
         days = new String[7];
-        week = new int[7];
         for(int i=0; i<7; i++) {
             Caf1[i] = new ArrayList<>();
             Caf2[i] = new ArrayList<>();
             Caf3[i] = new ArrayList<>();
             Caf4[i] = new ArrayList<>();
         }
+        serial = android.os.Build.SERIAL;
     }
 
     public static DataInstance getInstance() {
@@ -128,19 +129,23 @@ public class DataInstance {
         this.days = days;
     }
 
-    public int[] getWeek() {
-        return week;
-    }
-
-    public void setWeek(int[] week) {
-        this.week = week;
-    }
-
     public ArrayList<list_item> getSearch_list() {
         return search_list;
     }
 
     public void setSearch_list(ArrayList<list_item> search_list) {
         this.search_list = search_list;
+    }
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
     }
 }

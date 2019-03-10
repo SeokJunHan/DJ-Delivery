@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -118,6 +117,20 @@ public class PreActivity extends AppCompatActivity {
         loadListFromFirebase();
         loadBookMarkList();
         LoadUnivFoodData();
+
+        db.collection("banned").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        String id = document.getData().get("id").toString();
+                        if(id.equals(DataInstance.getInstance().getSerial())) {
+                            DataInstance.getInstance().setBanned(true);
+                        }
+                    }
+                }
+            }
+        });
 
         new Thread(new Runnable() {
             @Override

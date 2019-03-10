@@ -206,7 +206,7 @@ public class Main2Activity extends AppCompatActivity {
 
         if (list_itemArrayList.size() == temp_itemArrayList.size()) {
             if(check)
-                Toast.makeText(getApplicationContext(), "더 이상 항목이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "더 이상 항목이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
         }
 
         for (int i = 0; i < OFFSET; i++) {

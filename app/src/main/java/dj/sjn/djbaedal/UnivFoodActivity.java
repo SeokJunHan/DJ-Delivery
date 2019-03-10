@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -92,9 +93,13 @@ public class UnivFoodActivity extends AppCompatActivity {
                     week = "토";
                     break;
             }
-            String month = date.split("-")[1];
-            String day = date.split("-")[2];
-            list.add(month + "/" + day + " " + "(" + week + ")");
+            try {
+                String month = date.split("-")[1];
+                String day = date.split("-")[2];
+                list.add(month + "/" + day + " " + "(" + week + ")");
+            } catch (NullPointerException null_e) {
+                Toast.makeText(getApplicationContext(), "학식 정보를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+            }
         }
 
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, list);

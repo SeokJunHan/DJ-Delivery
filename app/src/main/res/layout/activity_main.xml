@@ -165,9 +165,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="최근리스트"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="24dp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/font"
+                    android:textSize="24dp"/>
 
                 <dj.sjn.djbaedal.DataClass.MyListView
                     android:id="@+id/recentList"

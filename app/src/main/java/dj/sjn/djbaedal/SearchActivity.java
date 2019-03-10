@@ -95,14 +95,22 @@ public class SearchActivity extends AppCompatActivity {
     public void search(String text) {
         list.clear();
 
-        if(!text.equals("")) {
+        boolean isOverlaped;
+        if (!text.equals("")) {
             for (int i = 0; i < DataInstance.getInstance().getSearch_list().size(); i++) {
-                if (DataInstance.getInstance().getSearch_list().get(i).getName().toLowerCase().contains(text.toLowerCase())) {
+                isOverlaped = false;
+                if (DataInstance.getInstance().getSearch_list().get(i).getName().toLowerCase().trim().contains(text.toLowerCase().trim())) {
+                    for(int j=0; j<list.size(); j++) {
+                        if(DataInstance.getInstance().getSearch_list().get(i).getName().trim().toLowerCase().equals(list.get(j).getName().trim().toLowerCase())) {
+                            isOverlaped = true;
+                            break;
+                        }
+                    }
+                    if(!isOverlaped)
                     list.add(DataInstance.getInstance().getSearch_list().get(i));
                 }
             }
-        }
-        else {
+        } else {
             list.clear();
         }
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -19,6 +19,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 
+import dj.sjn.djbaedal.DataClass.TouchImageView;
 import dj.sjn.djbaedal.R;
 
 public class SlidingImage_Adapter extends PagerAdapter {
@@ -26,7 +27,7 @@ public class SlidingImage_Adapter extends PagerAdapter {
     private String[] urls;
     private LayoutInflater inflater;
     private Context context;
-    ImageView imageView;
+    TouchImageView imageView;
 
     public SlidingImage_Adapter(Context context, String[] urls) {
         this.context = context;
@@ -59,11 +60,6 @@ public class SlidingImage_Adapter extends PagerAdapter {
         imageView = imageLayout.findViewById(R.id.sliding_image);
 
         if(urls[position] != null) {
-
-            for(String text : urls) {
-                if(text != null)
-                    Log.e("text", text);
-            }
 
             Glide.with(context)
                     .load(urls[position])

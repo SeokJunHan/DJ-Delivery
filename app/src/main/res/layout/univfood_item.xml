@@ -17,12 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:background="#ffff00"
         android:gravity="center"
         android:layout_gravity="center"
         android:textColor="@color/gray"
-        android:text="아침"
         android:textSize="16dp"
+        android:fontFamily="@font/font"
         android:layout_marginHorizontal="15dp"/>
 
     <TextView
@@ -34,7 +33,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="메뉴"
+        android:fontFamily="@font/font"
         android:textColor="@color/gray"
         android:textSize="16dp" />
 
@@ -47,6 +46,7 @@
             android:gravity="center"
             android:textColor="@color/gray"
             android:text="오늘은 학식이 없어요 !"
+            android:fontFamily="@font/font"
             android:layout_marginVertical="5dp"
             android:textSize="20dp" />
 

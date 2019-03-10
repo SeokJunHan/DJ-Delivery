@@ -22,6 +22,7 @@
         android:textSize="16dp"
         android:textStyle="bold"
         android:textColor="@color/black"
+        android:fontFamily="@font/font"
         android:text="proverbs"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"/>
@@ -33,6 +34,7 @@
         android:gravity="center"
         android:textSize="14dp"
         android:text="Copyright 2019. ByeolSoft. All rights reserved."
+        android:fontFamily="@font/font"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="2dp"/>
 

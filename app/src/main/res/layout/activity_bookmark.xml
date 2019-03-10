@@ -23,8 +23,9 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="24dp"
-            android:text="북마크"
             android:textStyle="bold"
+            android:text="북마크"
+            android:fontFamily="@font/font"
             android:layout_gravity="center"/>
 
     </android.support.v7.widget.Toolbar>
