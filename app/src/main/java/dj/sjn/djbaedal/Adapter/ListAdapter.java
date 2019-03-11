@@ -20,6 +20,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 
 import dj.sjn.djbaedal.DataClass.list_item;
@@ -36,6 +38,7 @@ public class ListAdapter extends BaseAdapter {
         TextView name;
         TextView tel_no;
         TextView type;
+        TextView rate;
     }
 
     public ListAdapter(Context context, ArrayList<list_item> list_itemArrayList) {
@@ -69,6 +72,7 @@ public class ListAdapter extends BaseAdapter {
             viewholder.name = convertView.findViewById(R.id.name);
             viewholder.tel_no = convertView.findViewById(R.id.tel_no);
             viewholder.type = convertView.findViewById(R.id.type);
+            viewholder.rate = convertView.findViewById(R.id.rate);
 
             //View에 object를 넣고 가져올 수 있게 해줌
             convertView.setTag(viewholder);
@@ -77,7 +81,6 @@ public class ListAdapter extends BaseAdapter {
         else {
             viewholder = (ViewHolder) convertView.getTag();
         }
-
 
         Glide.with(context)
                 .load(list_itemArrayList.get(position).getThumbnail())
@@ -89,6 +92,7 @@ public class ListAdapter extends BaseAdapter {
         viewholder.name.setText(list_itemArrayList.get(position).getName());
         viewholder.tel_no.setText(list_itemArrayList.get(position).getTel_no());
         viewholder.type.setText(list_itemArrayList.get(position).getType());
+        viewholder.rate.setText(list_itemArrayList.get(position).getRate());
 
         return convertView;
     }

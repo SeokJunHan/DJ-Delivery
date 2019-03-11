@@ -6,6 +6,7 @@ public class list_item {
 
     private String name, tel_no, type, extra_text, thumbnail, time;
     private String[] image;
+    private String rate;
 
     public list_item(String[] image, String name, String tel_no, String type, String extra_text, String thumbnail, String time) {
         this.image = image;
@@ -71,5 +72,13 @@ public class list_item {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
     }
 }

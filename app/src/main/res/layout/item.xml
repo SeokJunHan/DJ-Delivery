@@ -49,6 +49,14 @@
         android:fontFamily="@font/font"
         android:text="전화번호" />
 
+        <TextView
+            android:id="@+id/rate"
+            android:textColor="@color/gray"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/font"
+            android:text="평점 : -" />
+
     </LinearLayout>
 
     <ImageView

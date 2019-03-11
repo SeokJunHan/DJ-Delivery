@@ -224,19 +224,19 @@ public class Main3Activity extends AppCompatActivity {
     }
 
     private long timestampToLong(review_item review) {
-        return Long.parseLong(review.getTimeStamp().replace("-","").replace(":", "").replace(" ", ""));
+        return Long.parseLong(review.getTimeStamp().replace("-", "").replace(":", "").replace(" ", ""));
     }
 
     private ArrayList<review_item> bubbleSort(ArrayList<review_item> review_items) {
 
         review_item temp;
 
-        for(int i=0; i< review_items.size(); i++) {
-            for(int j=0; j<review_items.size() -i -1; j++) {
-                if(timestampToLong(review_items.get(j)) > timestampToLong(review_items.get(j+1))) {
+        for (int i = 0; i < review_items.size(); i++) {
+            for (int j = 0; j < review_items.size() - i - 1; j++) {
+                if (timestampToLong(review_items.get(j)) > timestampToLong(review_items.get(j + 1))) {
                     temp = review_items.get(j);
-                    review_items.set(j, review_items.get(j+1));
-                    review_items.set(j+1, temp);
+                    review_items.set(j, review_items.get(j + 1));
+                    review_items.set(j + 1, temp);
                 }
             }
         }
@@ -258,19 +258,21 @@ public class Main3Activity extends AppCompatActivity {
 
                 if (reviewCount != 0) {
                     float averageRate;
-                    averageRate = (float)(rate / (double) reviewCount);
+                    averageRate = (float) (rate / (double) reviewCount);
                     average_rates.setRating(Float.parseFloat(String.format("%.2f", averageRate)));
-                    average_text.setText(String.format("%.2f", averageRate) + " ( " + String.valueOf(reviewCount) + "명이 리뷰를 남겼습니다 )");
-                }
-                else {
+                    average_text.setText(String.format("%.2f", averageRate) + " ( " + String.valueOf(reviewCount) + "개의 리뷰가 있습니다 )");
+                    if (Main2Activity.mContext != null)
+                        ((Main2Activity) Main2Activity.mContext).renewRate(name, "평점 : " + String.format("%.2f", (double) rate / reviewCount) + " ( " + reviewCount + "개의 리뷰가 있습니다 )");
+                } else {
                     average_rates.setRating(0);
                     average_text.setText("-");
+                    if (Main2Activity.mContext != null)
+                        ((Main2Activity) Main2Activity.mContext).renewRate(name, "평점 : -");
                 }
+
             }
         });
     }
-
-    //TODO 디자인 다듬기 (폰트 등)
 
     private void setReview() {
         writeReview_layout.setVisibility(View.GONE);
@@ -307,7 +309,6 @@ public class Main3Activity extends AppCompatActivity {
                     String timestamp = document.getData().get("timestamp").toString();
                     String content = document.getData().get("content").toString();
                     review_list.add(new review_item(id, name, rates, content, timestamp));
-                    Log.e("추가됨", name);
                     if (id.equals(DataInstance.getInstance().getSerial())) {
                         checkReviewed = true;
                     }
@@ -320,7 +321,7 @@ public class Main3Activity extends AppCompatActivity {
 
                 if (reviewCount != 0) {
                     float averageRate;
-                    averageRate = (float)(rate / (double) reviewCount);
+                    averageRate = (float) (rate / (double) reviewCount);
                     average_rates.setRating(Float.parseFloat(String.format("%.2f", averageRate)));
                     average_text.setText(String.format("%.2f", averageRate) + " ( " + String.valueOf(reviewCount) + "개의 리뷰가 있습니다 )");
                 }
@@ -371,14 +372,13 @@ public class Main3Activity extends AppCompatActivity {
                     }
                 });
                 reviewAdapter.notifyDataSetChanged();
-                Log.e("size", review_list.size() + "");
             }
         });
 
         writeReview_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(DataInstance.getInstance().isBanned()) {
+                if (DataInstance.getInstance().isBanned()) {
                     Toast.makeText(getApplicationContext(), "리뷰 작성이 제한된 사용자입니다.", Toast.LENGTH_LONG).show();
                     return;
                 }
