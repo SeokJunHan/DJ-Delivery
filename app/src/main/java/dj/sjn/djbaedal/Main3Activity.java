@@ -303,17 +303,22 @@ public class Main3Activity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for (DocumentSnapshot document : task.getResult()) {
 
-                    String name = document.getData().get("name").toString();
-                    String id = document.getData().get("id").toString();
-                    int rates = Integer.parseInt(document.getData().get("rates").toString());
-                    String timestamp = document.getData().get("timestamp").toString();
-                    String content = document.getData().get("content").toString();
-                    review_list.add(new review_item(id, name, rates, content, timestamp));
-                    if (id.equals(DataInstance.getInstance().getSerial())) {
-                        checkReviewed = true;
+                    if(task.isSuccessful()) {
+                        String name = document.getData().get("name").toString();
+                        String id = document.getData().get("id").toString();
+                        int rates = Integer.parseInt(document.getData().get("rates").toString());
+                        String timestamp = document.getData().get("timestamp").toString();
+                        String content = document.getData().get("content").toString();
+                        review_list.add(new review_item(id, name, rates, content, timestamp));
+                        if (id.equals(DataInstance.getInstance().getSerial())) {
+                            checkReviewed = true;
+                        }
+                        reviewCount++;
+                        rate += rates;
                     }
-                    reviewCount++;
-                    rate += rates;
+                    else {
+                        Toast.makeText(getApplicationContext(), "리뷰 정보를 받아오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 review_list = bubbleSort(review_list);
