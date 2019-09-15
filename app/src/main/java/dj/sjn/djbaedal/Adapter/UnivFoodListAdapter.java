@@ -11,11 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.util.ArrayList;
 
 import dj.sjn.djbaedal.DataClass.UnivCaffetteria;
@@ -41,6 +36,7 @@ public class UnivFoodListAdapter extends BaseAdapter {
         this.univFoodArrayList = univFoodArrayList;
     }
 
+    // make couldn't click
     @Override
     public boolean isEnabled(int position) {
         return false;

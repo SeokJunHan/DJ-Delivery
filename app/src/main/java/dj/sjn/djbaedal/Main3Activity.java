@@ -97,6 +97,7 @@ public class Main3Activity extends AppCompatActivity {
     int rate = 0;
     int reviewCount = 0;
     int count, max;
+    final int MAX_IMAGES = 3;
     String[] urls;
 
     FirebaseFirestore db;
@@ -213,6 +214,8 @@ public class Main3Activity extends AppCompatActivity {
                 }
             });
 
+            itemClicked(new String[] {img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time);
+
             setReview();
         }
     }
@@ -221,6 +224,38 @@ public class Main3Activity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (imm.isActive())
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
+
+    private void itemClicked(String[] img_reg, String name, String tel_no, String type, String extra_text, String thumbnail, String time) {
+        //중복 데이터 존재
+        if (DataInstance.getInstance().getLinkedHashMap().get(name) != null) {
+            if (DataInstance.getInstance().getLinkedHashMap().get(name).getName().equals(name))
+                DataInstance.getInstance().getLinkedHashMap().remove(name);
+        } else if (DataInstance.getInstance().getLinkedHashMap().size() >= MAX_IMAGES + 1) {
+            for (Map.Entry<String, list_item> entry : DataInstance.getInstance().getLinkedHashMap().entrySet()) {
+                DataInstance.getInstance().getLinkedHashMap().remove(entry.getValue().getName());
+                break;
+            }
+        }
+        DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(img_reg, name, tel_no, type, extra_text, thumbnail, time));
+
+        //set pref.
+        editor.clear();
+        int i = 1;
+        for (Map.Entry<String, list_item> entry : DataInstance.getInstance().getLinkedHashMap().entrySet()) {
+            editor.putString("img_reg" + String.valueOf(i), entry.getValue().getImage()[0]);
+            editor.putString("img_reg2" + String.valueOf(i), entry.getValue().getImage()[1]);
+            editor.putString("img_reg3" + String.valueOf(i), entry.getValue().getImage()[2]);
+            editor.putString("name" + String.valueOf(i), entry.getValue().getName());
+            editor.putString("tel_no" + String.valueOf(i), entry.getValue().getTel_no());
+            editor.putString("type" + String.valueOf(i), entry.getValue().getType());
+            editor.putString("extra_text" + String.valueOf(i), entry.getValue().getExtra_text());
+            editor.putString("thumbnail" + String.valueOf(i), entry.getValue().getThumbnail());
+            editor.putString("time" + String.valueOf(i), entry.getValue().getTime());
+            i++;
+        }
+        editor.commit();
+        ((MainActivity) MainActivity.mContext).addList();
     }
 
     private long timestampToLong(review_item review) {
@@ -304,17 +339,24 @@ public class Main3Activity extends AppCompatActivity {
                 for (DocumentSnapshot document : task.getResult()) {
 
                     if(task.isSuccessful()) {
-                        String name = document.getData().get("name").toString();
-                        String id = document.getData().get("id").toString();
-                        int rates = Integer.parseInt(document.getData().get("rates").toString());
-                        String timestamp = document.getData().get("timestamp").toString();
-                        String content = document.getData().get("content").toString();
-                        review_list.add(new review_item(id, name, rates, content, timestamp));
-                        if (id.equals(DataInstance.getInstance().getSerial())) {
-                            checkReviewed = true;
+                        try {
+                            String name = document.getData().get("name").toString();
+                            String id = document.getData().get("id").toString();
+                            int rates = Integer.parseInt(document.getData().get("rates").toString());
+                            String timestamp = document.getData().get("timestamp").toString();
+                            String content = document.getData().get("content").toString();
+                            review_list.add(new review_item(id, name, rates, content, timestamp));
+                            if (id.equals(DataInstance.getInstance().getSerial())) {
+                                checkReviewed = true;
+                            }
+                            reviewCount++;
+                            rate += rates;
+                        } catch (NullPointerException null_e) {
+                            overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left
+                            finishAffinity();
+                            startActivity(new Intent(getApplicationContext(), PreActivity.class));
+                            Toast.makeText(getApplicationContext(), "리뷰 정보를 받아오는 도중 오류가 발생했습니다.\n앱을 재시작합니다.", Toast.LENGTH_LONG).show();
                         }
-                        reviewCount++;
-                        rate += rates;
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "리뷰 정보를 받아오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();

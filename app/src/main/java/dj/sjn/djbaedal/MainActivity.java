@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Random;
 
 import dj.sjn.djbaedal.Adapter.RecentAdapter;
 import dj.sjn.djbaedal.DataClass.CheckNetwork;
@@ -39,7 +40,7 @@ import dj.sjn.djbaedal.DataClass.list_item;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView button1, button2, button3, button4, button5, button6, button7, button8, button9, schoolfood;
+    ImageView button1, button2, button3, button4, button5, button6, button7, button8, button9, schoolfood, randomFood;
     ImageView[] buttons;
     dj.sjn.djbaedal.DataClass.MyListView listView;
     RecentAdapter recentAdapter;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         schoolfood = findViewById(R.id.haksik);
         buttons = new ImageView[]{button1, button2, button3, button4, button5, button6, button7, button8, button9};
         adView = findViewById(R.id.adBanner);
+        randomFood = findViewById(R.id.randomFood);
 
         Toolbar toolbar = findViewById(R.id.toolbar1);
         toolbar.setTitle("");
@@ -158,6 +160,38 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), UnivFoodActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+                }
+            });
+            randomFood.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Random random = new Random();
+                    int randomNumber = random.nextInt(DataInstance.getInstance().getSearch_list().size());
+
+                    Intent intent = new Intent(getApplicationContext(), Main3Activity.class);
+                    final String img_reg = DataInstance.getInstance().getSearch_list().get(randomNumber).getImage()[0];
+                    final String img_reg2 = DataInstance.getInstance().getSearch_list().get(randomNumber).getImage()[1];
+                    final String img_reg3 =  DataInstance.getInstance().getSearch_list().get(randomNumber).getImage()[2];
+                    final String name =  DataInstance.getInstance().getSearch_list().get(randomNumber).getName();
+                    final String tel_no =  DataInstance.getInstance().getSearch_list().get(randomNumber).getTel_no();
+                    final String type =  DataInstance.getInstance().getSearch_list().get(randomNumber).getType();
+                    final String extra_text =  DataInstance.getInstance().getSearch_list().get(randomNumber).getExtra_text();
+                    final String thumbnail =  DataInstance.getInstance().getSearch_list().get(randomNumber).getThumbnail();
+                    final String time =  DataInstance.getInstance().getSearch_list().get(randomNumber).getTime();
+
+                    intent.putExtra("img_reg", img_reg);
+                    intent.putExtra("img_reg2", img_reg2);
+                    intent.putExtra("img_reg3", img_reg3);
+                    intent.putExtra("name", name);
+                    intent.putExtra("tel_no", tel_no);
+                    intent.putExtra("type", type);
+                    intent.putExtra("extra_text", extra_text);
+                    intent.putExtra("thumbnail", thumbnail);
+                    intent.putExtra("time", time);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);

@@ -7,18 +7,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +26,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 import dj.sjn.djbaedal.Adapter.ListAdapter;
 import dj.sjn.djbaedal.DataClass.CheckNetwork;
@@ -45,8 +45,6 @@ public class Main2Activity extends AppCompatActivity {
     Toolbar toolbar;
     public static Context mContext;
     int reviewCount, reviewSum;
-
-    final int MAX_IMAGES = 3; // Main3's images limit.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -169,7 +167,7 @@ public class Main2Activity extends AppCompatActivity {
                 list_itemArrayList.get(i).setRate("평점 : -");
                 db.collection("review").document(list_itemArrayList.get(i).getName()).collection("review").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@Nonnull Task<QuerySnapshot> task) {
                         reviewCount = 0;
                         reviewSum = 0;
                         if(task.isSuccessful()) {
@@ -211,12 +209,6 @@ public class Main2Activity extends AppCompatActivity {
                     final String thumbnail = list_itemArrayList.get(position).getThumbnail();
                     final String time = list_itemArrayList.get(position).getTime();
 
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            itemClicked(new String[] {img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time);
-                        }
-                    });
                     intent.putExtra("img_reg", img_reg);
                     intent.putExtra("img_reg2", img_reg2);
                     intent.putExtra("img_reg3", img_reg3);
@@ -268,38 +260,6 @@ public class Main2Activity extends AppCompatActivity {
 //            }
 //        }, 700);
 //    }
-
-    private void itemClicked(String[] img_reg, String name, String tel_no, String type, String extra_text, String thumbnail, String time) {
-        //중복 데이터 존재
-        if (DataInstance.getInstance().getLinkedHashMap().get(name) != null) {
-            if (DataInstance.getInstance().getLinkedHashMap().get(name).getName().equals(name))
-                DataInstance.getInstance().getLinkedHashMap().remove(name);
-        } else if (DataInstance.getInstance().getLinkedHashMap().size() >= MAX_IMAGES + 1) {
-            for (Map.Entry<String, list_item> entry : DataInstance.getInstance().getLinkedHashMap().entrySet()) {
-                DataInstance.getInstance().getLinkedHashMap().remove(entry.getValue().getName());
-                break;
-            }
-        }
-        DataInstance.getInstance().getLinkedHashMap().put(name, new list_item(img_reg, name, tel_no, type, extra_text, thumbnail, time));
-
-        //set pref.
-        editor.clear();
-        int i = 1;
-        for (Map.Entry<String, list_item> entry : DataInstance.getInstance().getLinkedHashMap().entrySet()) {
-            editor.putString("img_reg" + String.valueOf(i), entry.getValue().getImage()[0]);
-            editor.putString("img_reg2" + String.valueOf(i), entry.getValue().getImage()[1]);
-            editor.putString("img_reg3" + String.valueOf(i), entry.getValue().getImage()[2]);
-            editor.putString("name" + String.valueOf(i), entry.getValue().getName());
-            editor.putString("tel_no" + String.valueOf(i), entry.getValue().getTel_no());
-            editor.putString("type" + String.valueOf(i), entry.getValue().getType());
-            editor.putString("extra_text" + String.valueOf(i), entry.getValue().getExtra_text());
-            editor.putString("thumbnail" + String.valueOf(i), entry.getValue().getThumbnail());
-            editor.putString("time" + String.valueOf(i), entry.getValue().getTime());
-            i++;
-        }
-        editor.commit();
-        ((MainActivity) MainActivity.mContext).addList();
-    }
 
     @Override
     public void finish() {
