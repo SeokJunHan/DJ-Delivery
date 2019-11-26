@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -118,20 +117,6 @@ public class PreActivity extends AppCompatActivity {
         loadBookMarkList();
         LoadUnivFoodData();
 
-        db.collection("banned").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    for(QueryDocumentSnapshot document : task.getResult()) {
-                        String id = document.getData().get("id").toString();
-                        if(id.equals(DataInstance.getInstance().getSerial())) {
-                            DataInstance.getInstance().setBanned(true);
-                        }
-                    }
-                }
-            }
-        });
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -198,7 +183,9 @@ public class PreActivity extends AppCompatActivity {
                 DataInstance.getInstance().getLinkedHashMap2().put(name, new list_item(new String[]{img_reg, img_reg2, img_reg3}, name, tel_no, type, extra_text, thumbnail, time));
             } catch (ArrayIndexOutOfBoundsException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "데이터를 불러오는 도중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+            }
+            catch (NullPointerException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -493,7 +480,6 @@ public class PreActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
                     loadFail = true;
                 }
             });
@@ -528,7 +514,6 @@ public class PreActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
                     loadFail = true;
                 }
             });
@@ -563,7 +548,6 @@ public class PreActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
                     loadFail = true;
                 }
             });
@@ -598,7 +582,6 @@ public class PreActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UnivFoodList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "학식 리스트를 불러오는 도중 오류가 발생했습니다.\n오류가 계속해서 발생한다면 앱 데이터 삭제후 다시 실행해주세요.", Toast.LENGTH_LONG).show();
                     loadFail = true;
                     if(loadFail) {
                         editor.clear();

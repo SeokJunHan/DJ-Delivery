@@ -270,29 +270,12 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean check = false;
-        if (DataInstance.getInstance().getList1().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList3().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList4().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList5().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList6().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList7().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList8().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList9().size() == 0)
-            check = true;
-        if (check) {
+
+        if (Util.CheckFoodList()) {
             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left
             finishAffinity();
             startActivity(new Intent(getApplicationContext(), PreActivity.class));
         }
     }
+
 }

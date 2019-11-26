@@ -45,6 +45,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -80,7 +81,7 @@ public class Main3Activity extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     TextView telText, title, extra, timeText;
-    LinearLayout time_layout, writeReview_layout;
+    LinearLayout time_layout, writeReview_layout, needLogin_layout;
     String img_reg, img_reg2, img_reg3, name, tel_no, type, extra_text, thumbnail, time;
     Snackbar snackbar;
     ArrayList<review_item> review_list;
@@ -90,7 +91,6 @@ public class Main3Activity extends AppCompatActivity {
     AlertDialog alertDialog;
     Toolbar toolbar;
     ViewPager viewPager;
-    Boolean check = false;
     Boolean checkReviewed = false;
     int currentPage = 0;
     int NUM_PAGES = 0;
@@ -99,16 +99,19 @@ public class Main3Activity extends AppCompatActivity {
     int count, max;
     final int MAX_IMAGES = 3;
     String[] urls;
+    boolean isBanned = false;
 
     FirebaseFirestore db;
     RatingBar writeReview_rates;
-    EditText writeReview_name;
+    TextView writeReview_name;
     EditText writeReview_content;
     Button writeReview_button;
     MyListView review_listView;
     RatingBar average_rates;
     TextView average_text;
     View main3_layout;
+    FirebaseAuth mAuth;
+    String Uid = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,10 +135,14 @@ public class Main3Activity extends AppCompatActivity {
         average_rates = findViewById(R.id.average_rates);
         average_text = findViewById(R.id.average_text);
         main3_layout = findViewById(R.id.main3_layout);
+        needLogin_layout = findViewById(R.id.needLogin_layout);
 
         pref = getSharedPreferences("bookmark", MODE_PRIVATE);
         editor = pref.edit();
         review_list = new ArrayList<>();
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() != null)
+            Uid = mAuth.getCurrentUser().getUid();
 
         if (!new CheckNetwork().getNetworkInfo(getApplicationContext())) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -255,6 +262,8 @@ public class Main3Activity extends AppCompatActivity {
             i++;
         }
         editor.commit();
+
+        if(MainActivity.mContext != null)
         ((MainActivity) MainActivity.mContext).addList();
     }
 
@@ -311,6 +320,7 @@ public class Main3Activity extends AppCompatActivity {
 
     private void setReview() {
         writeReview_layout.setVisibility(View.GONE);
+        needLogin_layout.setVisibility(View.GONE);
         db = FirebaseFirestore.getInstance();
 
         snackbar = Snackbar.make(main3_layout, "리뷰 정보를 받아오고있습니다...", Snackbar.LENGTH_INDEFINITE);
@@ -333,6 +343,19 @@ public class Main3Activity extends AppCompatActivity {
     }
 
     private void LoadReviews() {
+        db.collection("banned").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        String id = document.getData().get("id").toString();
+                        if(id.equals(Uid)) {
+                            isBanned = true;
+                        }
+                    }
+                }
+            }
+        });
         db.collection("review").document(name).collection("review").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -346,7 +369,7 @@ public class Main3Activity extends AppCompatActivity {
                             String timestamp = document.getData().get("timestamp").toString();
                             String content = document.getData().get("content").toString();
                             review_list.add(new review_item(id, name, rates, content, timestamp));
-                            if (id.equals(DataInstance.getInstance().getSerial())) {
+                            if (id.equals(Uid)) {
                                 checkReviewed = true;
                             }
                             reviewCount++;
@@ -373,15 +396,23 @@ public class Main3Activity extends AppCompatActivity {
                     average_text.setText(String.format("%.2f", averageRate) + " ( " + String.valueOf(reviewCount) + "개의 리뷰가 있습니다 )");
                 }
 
-                if (!checkReviewed)
-                    writeReview_layout.setVisibility(View.VISIBLE);
+                if(mAuth.getCurrentUser() != null) {
+                    if (!checkReviewed) {
+                        writeReview_layout.setVisibility(View.VISIBLE);
+                        writeReview_name.setText(mAuth.getCurrentUser().getDisplayName());
+                    }
+                }
+                else {
+                    writeReview_layout.setVisibility(View.GONE);
+                    needLogin_layout.setVisibility(View.VISIBLE);
+                }
 
                 reviewAdapter = new ReviewAdapter(Main3Activity.this, review_list, name);
                 review_listView.setAdapter(reviewAdapter);
                 review_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                        if (review_list.get(position).getUser_id().equals(DataInstance.getInstance().getSerial())) {
+                        if (review_list.get(position).getUser_id().equals(Uid)) {
                             final int temp_position = position;
                             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Main3Activity.this);
                             alertDialogBuilder.setTitle("알림")
@@ -391,7 +422,7 @@ public class Main3Activity extends AppCompatActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                                             try {
-                                                db.collection("review").document(name).collection("review").document(DataInstance.getInstance().getSerial()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                db.collection("review").document(name).collection("review").document(Uid).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
@@ -425,7 +456,7 @@ public class Main3Activity extends AppCompatActivity {
         writeReview_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (DataInstance.getInstance().isBanned()) {
+                if (isBanned) {
                     Toast.makeText(getApplicationContext(), "리뷰 작성이 제한된 사용자입니다.", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -451,12 +482,12 @@ public class Main3Activity extends AppCompatActivity {
                     map.put("name", name2);
                     map.put("content", content);
                     map.put("timestamp", timestamp);
-                    map.put("id", DataInstance.getInstance().getSerial());
-                    db.collection("review").document(name).collection("review").document(DataInstance.getInstance().getSerial()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    map.put("id", Uid);
+                    db.collection("review").document(name).collection("review").document(Uid).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             writeReview_layout.setVisibility(View.GONE);
-                            review_list.add(new review_item(DataInstance.getInstance().getSerial(), name2, rates, content, timestamp));
+                            review_list.add(new review_item(Uid, name2, rates, content, timestamp));
                             checkReviewed = false;
                             reviewAdapter.notifyDataSetChanged();
                             Toast.makeText(getApplicationContext(), "리뷰가 작성되었습니다.", Toast.LENGTH_LONG).show();
@@ -475,30 +506,11 @@ public class Main3Activity extends AppCompatActivity {
         });
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        boolean check = false;
-        if (DataInstance.getInstance().getList1().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList3().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList4().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList5().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList6().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList7().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList8().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList9().size() == 0)
-            check = true;
-        if (check) {
+
+        if (Util.CheckFoodList()) {
             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left
             finishAffinity();
             startActivity(new Intent(getApplicationContext(), PreActivity.class));
@@ -600,6 +612,7 @@ public class Main3Activity extends AppCompatActivity {
                 count = 0;
                 max = 0;
                 max++;
+
                 Glide.with(getApplicationContext()).asBitmap().load(img_reg)
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
@@ -607,11 +620,12 @@ public class Main3Activity extends AppCompatActivity {
                                 int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
                                 if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(Main3Activity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                                    Toast.makeText(getApplicationContext(), "저장소 권한을 확인후 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+                                    return;
                                 }
                                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
                                 Date time = new Date();
                                 String path = saveBitmap(resource, "Download", name + "1_" + format.format(time));
-                                check = true;
                                 if (path != null)
                                     count++;
                             }
@@ -624,7 +638,7 @@ public class Main3Activity extends AppCompatActivity {
                                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                     SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
                                     Date time = new Date();
-                                    String path = saveBitmap(resource, "Download", name + "2_" + format.format(time));
+                                    String path = saveBitmap(resource, Environment.getExternalStorageDirectory()+"/Download", name + "2_" + format.format(time));
                                     if (path != null)
                                         count++;
                                 }
@@ -638,7 +652,7 @@ public class Main3Activity extends AppCompatActivity {
                                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                     SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
                                     Date time = new Date();
-                                    String path = saveBitmap(resource, "Download", name + "3_" + format.format(time));
+                                    String path = saveBitmap(resource, Environment.getExternalStorageDirectory()+"/Download", name + "3_" + format.format(time));
                                     if (path != null)
                                         count++;
                                 }

@@ -2,20 +2,16 @@ package dj.sjn.djbaedal.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import dj.sjn.djbaedal.DataClass.UnivCaffetteria;
-import dj.sjn.djbaedal.DataClass.UnivFoodList;
-import dj.sjn.djbaedal.DataClass.list_item;
 import dj.sjn.djbaedal.R;
 
 public class UnivFoodListAdapter extends BaseAdapter {

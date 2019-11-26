@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="오늘 뭐드실">
+        <menu>
+            <item
+                android:icon="@drawable/gmail"
+                android:id="@+id/menu_gmail"
+                android:title="메일 문의"
+                />
+            <item
+                android:icon="@drawable/man"
+                android:id="@+id/menu_man"
+                android:title="개발자"
+                />
+        </menu>
+    </item>
+
+</menu>

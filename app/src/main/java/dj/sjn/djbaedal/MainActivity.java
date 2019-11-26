@@ -7,9 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Debug;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
@@ -19,13 +24,34 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +64,8 @@ import dj.sjn.djbaedal.DataClass.CheckNetwork;
 import dj.sjn.djbaedal.DataClass.DataInstance;
 import dj.sjn.djbaedal.DataClass.list_item;
 
+import static android.view.View.GONE;
+
 public class MainActivity extends AppCompatActivity {
 
     ImageView button1, button2, button3, button4, button5, button6, button7, button8, button9, schoolfood, randomFood;
@@ -46,11 +74,35 @@ public class MainActivity extends AppCompatActivity {
     RecentAdapter recentAdapter;
     ArrayList<list_item> arrayList;
     AdView adView;
+    private DrawerLayout mDrawerLayout;
+    NavigationView navigationView;
+    View headerView;
     private long lastTimeBackPressed;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     public static Context mContext;
+
+    LinearLayout withLogin, withOutLogin;
+    SignInButton signInButton;
+    TextView signInId;
+    FirebaseAuth mAuth;
+    FirebaseAuth.AuthStateListener mAuthListener;
+    GoogleSignInClient signInClient;
+    Button logoutButton;
+    final int GOOGLE_RC = 900;
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +131,92 @@ public class MainActivity extends AppCompatActivity {
         buttons = new ImageView[]{button1, button2, button3, button4, button5, button6, button7, button8, button9};
         adView = findViewById(R.id.adBanner);
         randomFood = findViewById(R.id.randomFood);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        headerView = navigationView.getHeaderView(0);
+        withLogin = headerView.findViewById(R.id.drawer_header_with_login);
+        withOutLogin = headerView.findViewById(R.id.drawer_header_without_login);
+        signInButton = headerView.findViewById(R.id.drawer_header_login_button);
+        signInId = headerView.findViewById(R.id.drawer_header_id);
+        logoutButton = headerView.findViewById(R.id.drawer_header_logout_button);
+
+        // 구글 로그인
+        mAuth = FirebaseAuth.getInstance();
+
+        // 구글 로그인 앱에 통합
+        // GoogleSignInOptions 객체를 구성할때 requestIdToken 호출.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        signInClient = GoogleSignIn.getClient(this, gso);
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signIntent = signInClient.getSignInIntent();
+                startActivityForResult(signIntent, GOOGLE_RC);
+            }
+        });
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "로그아웃 되었습니다.", Toast.LENGTH_LONG).show();
+                FirebaseAuth.getInstance().signOut();
+                signInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
+            }
+        });
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                UpdateUi();
+            }
+        };
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                switch(id) {
+                    case R.id.menu_gmail:
+                        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                        try {
+                            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"byeolsoft@gmail.com"});
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, "\n"+
+                                    "앱을 설치해주셔서 감사합니다.\n" +
+                                    "문의 내용은 최대한 자세히 작성해주시면 감사하겠습니다!");
+                            emailIntent.setType("text/html");
+                            emailIntent.setPackage("com.google.android.gm");
+
+                            startActivity(emailIntent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            emailIntent.setType("text/html");
+                            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"byeolsoft@gmail.com"});
+
+                            startActivity(Intent.createChooser(emailIntent, "이메일 보내기"));
+                        }
+                    break;
+                    case R.id.menu_man:
+                        Intent intent = new Intent(getApplicationContext(), ManDialog.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar1);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationIcon(R.drawable.gmail);
         scrollView.smoothScrollBy(0, 0);
 
         if (!new CheckNetwork().getNetworkInfo(getApplicationContext())) {
@@ -228,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
                 editor2.commit();
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("앱의 사용 후기를 말씀해주세요")
-                        .setMessage("좋은 리뷰가 더 좋은 앱을 만듭니다.\n리뷰를 남겨주세요!")
+                        .setMessage("앱에 대한 솔직한 리뷰를 남겨주세요!")
                         .setCancelable(false)
                         .setPositiveButton("좋아요", new DialogInterface.OnClickListener() {
                             @Override
@@ -254,28 +386,60 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GOOGLE_RC) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {}
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), mAuth.getCurrentUser().getDisplayName() +" 님 로그인되었습니다.", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void UpdateUi() {
+        mAuth = FirebaseAuth.getInstance();
+        // 로그인 상태
+        if(mAuth.getCurrentUser()!=null) {
+            signInId.setText(mAuth.getCurrentUser().getDisplayName());
+            withOutLogin.setVisibility(GONE);
+            withLogin.setVisibility(View.VISIBLE);
+        }
+
+        //로그아웃 상태
+        else {
+            withLogin.setVisibility(GONE);
+            withOutLogin.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        boolean check = false;
-        if (DataInstance.getInstance().getList1().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList2().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList3().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList4().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList5().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList6().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList7().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList8().size() == 0)
-            check = true;
-        else if (DataInstance.getInstance().getList9().size() == 0)
-            check = true;
-        if (check) {
+
+        if (Util.CheckFoodList()) {
             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right); //slide to left
             finishAffinity();
             startActivity(new Intent(getApplicationContext(), PreActivity.class));
@@ -284,6 +448,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawers();
+            return;
+        }
         if (System.currentTimeMillis() - lastTimeBackPressed < 750) {
             finishAffinity();
             return;
@@ -296,24 +464,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                try {
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"byeolsoft@gmail.com"});
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, "" +
-                            "\n\n\n==============================\n오늘뭐드실? 앱을 이용해주셔서 감사합니다!\n" +
-                            "전단지 추가를 원하신다면 전화번호와 메뉴가 잘 보이게 사진을 찍어서 보내주세요.\n" +
-                            "오류 발생시에는 해결을 위해 오류 발생 상황에 대한 자세한 설명을 부탁드립니다.");
-                    emailIntent.setType("text/html");
-                    emailIntent.setPackage("com.google.android.gm");
-
-                    startActivity(emailIntent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    emailIntent.setType("text/html");
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"byeolsoft@gmail.com"});
-
-                    startActivity(Intent.createChooser(emailIntent, "이메일 보내기"));
-                }
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             }
             case R.id.action_bookmark: {

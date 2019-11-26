@@ -221,15 +221,18 @@
                     android:scaleY="0.8"
                     android:stepSize="1" />
 
-                <EditText
+                <TextView
                     android:id="@+id/writeReview_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginTop="10dp"
+                    android:paddingLeft="4dp"
                     android:layout_weight="10"
                     android:gravity="left"
-                    android:hint="이름"
+                    android:text="이름"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="5dp"
                     android:imeOptions="actionDone"
                     android:fontFamily="@font/font"
                     android:inputType="text"
@@ -273,6 +276,23 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/needLogin_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="로그인을 해야 리뷰를 남길 수 있습니다."
+                    android:textSize="14dp"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
             <dj.sjn.djbaedal.DataClass.MyListView
                 android:id="@+id/review_listView"
                 android:layout_width="match_parent"
@@ -280,6 +300,7 @@
                 android:layout_marginHorizontal="10dp"></dj.sjn.djbaedal.DataClass.MyListView>
 
         </LinearLayout>
+
     </ScrollView>
 </LinearLayout>
 

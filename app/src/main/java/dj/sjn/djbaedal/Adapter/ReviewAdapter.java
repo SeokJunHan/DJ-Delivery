@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 import dj.sjn.djbaedal.DataClass.DataInstance;
@@ -71,9 +73,10 @@ public class ReviewAdapter extends BaseAdapter {
         viewHolder.review_timeStamp.setText(review_items.get(position).getTimeStamp());
         viewHolder.review_content.setText(review_items.get(position).getContents());
         viewHolder.review_rates.setRating(review_items.get(position).getRate());
-        if(DataInstance.getInstance().getSerial().equals(review_items.get(position).getUser_id())) {
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser()!= null && mAuth.getCurrentUser().getUid().equals(review_items.get(position).getUser_id())) {
             viewHolder.review_id.setTextColor(Color.BLUE);
-            viewHolder.review_id.setText(viewHolder.review_id.getText().toString() + " (나)");
         }
         else {
             viewHolder.review_id.setTextColor(Color.BLACK);

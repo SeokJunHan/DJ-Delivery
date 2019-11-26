@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="240dp"
+    android:layout_height="160dp"
+    android:background="@color/colorPrimary"
+    android:padding="12dip">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="만든이 :"
+        android:textSize="14dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_weight="4"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="컴퓨터공학과 15학번\n재학생 나부랭이"
+        android:textSize="13dp"
+        android:paddingRight="10dp"
+        android:layout_gravity="center"
+        android:gravity="right"
+        android:layout_weight="2"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Special thanks to\nprofessor Jung Min Kim."
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_weight="2"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Email : byeolsoft@gmail.com"
+        android:textSize="12dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Powered By AndroidStudio."
+        android:textSize="12dp"
+        android:gravity="center"
+        android:layout_weight="2"/>
+
+</LinearLayout>
