@@ -351,12 +351,12 @@ public class PreActivity extends AppCompatActivity {
                     && DataInstance.getInstance().getList7().size() > 0
                     && DataInstance.getInstance().getList8().size() > 0
                     && DataInstance.getInstance().getList9().size() > 0) {
-                if (checkResponse1 && checkResponse2 && checkResponse3 && checkResponse4) {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
-                    finish();
-                    break;
-                }
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+                finish();
+                break;
+//                if (checkResponse1 && checkResponse2 && checkResponse3 && checkResponse4) {
+//                }
             }
             try {
                 Thread.sleep(200);

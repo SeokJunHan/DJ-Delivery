@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         button7 = findViewById(R.id.hamburger);
         button8 = findViewById(R.id.soup);
         button9 = findViewById(R.id.night);
-        schoolfood = findViewById(R.id.haksik);
+//        schoolfood = findViewById(R.id.haksik);
         buttons = new ImageView[]{button1, button2, button3, button4, button5, button6, button7, button8, button9};
         adView = findViewById(R.id.adBanner);
         randomFood = findViewById(R.id.randomFood);
@@ -288,15 +288,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-            schoolfood.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), UnivFoodActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
-                }
-            });
+//            schoolfood.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(getApplicationContext(), UnivFoodActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                    startActivity(intent);
+//                    overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+//                }
+//            });
             randomFood.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -355,7 +355,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e(today, d2);
             Log.e("checkReview", checkReview);
             if (checkReview.equals(today)) {
-                Log.e("생성", "아무튼 생성됨");
                 editor2.putString("review", "done");
                 editor2.commit();
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -423,6 +422,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // 로그인 상태
         if(mAuth.getCurrentUser()!=null) {
+            Log.e("로그인", "로그인 됨");
             signInId.setText(mAuth.getCurrentUser().getDisplayName());
             withOutLogin.setVisibility(GONE);
             withLogin.setVisibility(View.VISIBLE);
@@ -430,6 +430,7 @@ public class MainActivity extends AppCompatActivity {
 
         //로그아웃 상태
         else {
+            Log.e("로그인", "로그아웃 됨");
             withLogin.setVisibility(GONE);
             withOutLogin.setVisibility(View.VISIBLE);
         }

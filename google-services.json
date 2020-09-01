@@ -1,0 +1,65 @@
+{
+  "project_info": {
+    "project_number": "421805029806",
+    "firebase_url": "https://djbaedal-58866.firebaseio.com",
+    "project_id": "djbaedal-58866",
+    "storage_bucket": "djbaedal-58866.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421805029806:android:1382368ca90f1cb9",
+        "android_client_info": {
+          "package_name": "dj.sjn.djbaedal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421805029806-3br0pnpuua3panfq10qh80vaigbk2em0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dj.sjn.djbaedal",
+            "certificate_hash": "027be1defeea0fbead943a47772dc714801b545e"
+          }
+        },
+        {
+          "client_id": "421805029806-ihm9g69q55vi6rpsq78ldrfbo3n43edj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dj.sjn.djbaedal",
+            "certificate_hash": "a2fb699d1963eeff23c8882094046feee3c435d1"
+          }
+        },
+        {
+          "client_id": "421805029806-124gckd9m61aslcq2e1jdlv7nnjrfc4h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dj.sjn.djbaedal",
+            "certificate_hash": "f7fc5e2c587952aa4dcdba6b1c0db1b32b855a29"
+          }
+        },
+        {
+          "client_id": "421805029806-0kpd2aa9n04fn328r6nm6vg1i17dtghd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsS_cVYTmzADG7476SynnzVk6RHbgcx1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421805029806-0kpd2aa9n04fn328r6nm6vg1i17dtghd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5085487258990676~8014015729"
+    }
+  ],
+  "configuration_version": "1"
+}
